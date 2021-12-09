@@ -12,6 +12,7 @@
 #include <iostream>
 #include <PubSubClient.h>
 #include <Wire.h>
+#include "values.h"
 
 const char *mqtt_broker = "192.168.29.24";
 const char *topic = "esp32/test";
@@ -20,20 +21,18 @@ const char *mqtt_password = "public";
 const int mqtt_port = 1883;
 
 uint32_t tsLastReport = 0;
-uint32_t REPORTING_PERIOD_MS = 500;
+#define REPORTING_PERIOD_MS 1000
+float BPM, SpO2;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 PulseOximeter pulseOxymeter;
 
-//std::string SSID = WIFISSID;
-//std::string PASS = WIFIPASS;
-
 void ConnectToWiFi()
 {
   WiFi.mode(WIFI_STA);
-  WiFi.begin("TAURUS.4G","12345678");
-  Serial.print("Connecting to Wifi \n"); 
+  WiFi.begin(SSID, PASS);
+  Serial.println("Connecting to Wifi...");
   while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print("connecting... \n");
@@ -54,25 +53,29 @@ void callback(char *topic, byte *payload, unsigned int length) {
  Serial.println("-----------------------");
 }
 
-void connecttoMQTT(){
-   client.setServer(mqtt_broker,mqtt_port);
+void connecttoMQTT()
+{
+  client.setServer(mqtt_broker, mqtt_port);
   client.setCallback(callback);
-  while (!client.connected()) {
+  while (!client.connected())
+  {
     String client_id = "esp32-client-";
     client_id += String(WiFi.macAddress());
     Serial.printf("The client %s connects to the public mqtt broker\n", client_id.c_str());
     if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
         Serial.println("Public mosquitto mqtt broker connected");
-    } else {
-        Serial.print("failed with state ");
-        Serial.println(client.state());
-        delay(2000);
     }
-}
+    else
+    {
+      Serial.print("failed with state ");
+      Serial.println(client.state());
+      delay(2000);
+    }
+  }
 }
 
 void onBeatDetected() {
-  Serial.println("BEEP");
+    Serial.println("Beat Detected!");
 }
 
 void initOxymeter() {
@@ -88,8 +91,11 @@ void initOxymeter() {
   pinMode(21, OUTPUT);
 }
 
-void setup() {
+void setup()
+{
+  Wire.begin();
   Serial.begin(512000);
+  while(!Serial);
   ConnectToWiFi();
   connecttoMQTT();
   initOxymeter();

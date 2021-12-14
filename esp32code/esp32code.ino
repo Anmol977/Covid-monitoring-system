@@ -61,19 +61,16 @@
 
 #define SENSOR_PIN  21
 
-OneWire oneWire(SENSOR_PIN);
-DallasTemperature DS18B20(&oneWire);
-
-float tempF; // temperature in Fahrenheit
-float tempC; // temperature in Celsius
 
 //#pragma once
-#include <string.h>
+#include <string>
 #include <WiFi.h>
 #include <iostream>
 #include <PubSubClient.h>
 #include <Wire.h>
 #include "values.h"
+
+#define DELAY 500
 
 const char *mqtt_broker = "192.168.29.24";
 const char *topic = "esp32/test";
@@ -83,10 +80,14 @@ const int mqtt_port = 1883;
 
 uint32_t tsLastReport = 0;
 
-#define DELAY 500
-
+float tempF; // temperature in Fahrenheit
+float tempC; // temperature in Celsius
 float BPM, SpO2;
 
+bool temp_res;
+
+OneWire oneWire(SENSOR_PIN);
+DallasTemperature DS18B20(&oneWire);
 WiFiClient espClient;
 PubSubClient client(espClient);
 PulseOximeter pulseOxymeter;
@@ -116,8 +117,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
  Serial.println("-----------------------");
 }
 
-void connecttoMQTT()
-{
+void connecttoMQTT() {
   client.setServer(mqtt_broker, mqtt_port);
   client.setCallback(callback);
   while (!client.connected())
@@ -154,8 +154,7 @@ void initOxymeter() {
   pinMode(21, OUTPUT);
 }
 
-void setup()
-{
+void setup() {
   Wire.begin();
   Serial.begin(512000);
   while(!Serial);
@@ -170,14 +169,22 @@ void senseTemperature() {
   tempC = DS18B20.getTempCByIndex(0);  // read temperature in °C
   tempF = DS18B20.getTempFByIndex(0);
 
-  if(tempC == DEVICE_DISCONNECTED_C) 
-  {
-    Serial.println("Error: Could not read temperature data");
-  } 
-  else
-  {
+  if(tempC != DEVICE_DISCONNECTED_C) {
+    
     Serial.print("Temperature for the device 1 (index 0) is: ");
     Serial.println(tempC);
+    String payload_temp;
+    payload_temp += tempC;
+    //char* s = (char*) tempC;
+    //temp_res = client.publish("Temperature", s);
+    temp_res = client.publish("Temperature", (char*) payload_temp.c_str());
+
+    if (temp_res) {
+      Serial.println("Published Succesfully.");
+    }
+  } 
+  else {
+    Serial.println("Error: Could not read temperature data");
   }
 }
 

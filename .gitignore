@@ -1,5 +1,9 @@
 values.h
 server/node_modules
+app_src/MyApp/node_modules
+app_src/MyApp/android
+app_src/MyApp/ios
+
 # dependencies
 /node_modules
 /.pnp

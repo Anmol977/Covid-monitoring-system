@@ -1,18 +1,36 @@
 import React from 'react';
 import {
-  Link,
   Text,
   HStack,
   Center,
-  Heading,
   Switch,
   useColorMode,
   NativeBaseProvider,
-  VStack,
-  Code,
+  StorageManager,
+  ColorMode
 } from 'native-base';
 import Login from './screens/login';
-// import theme from './theme/theme';
+import SplashScreen from "react-native-splash-screen";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import theme from './theme/theme';
+
+const colorModeManager: StorageManager = {
+  get: async () => {
+    try {
+      let val = await AsyncStorage.getItem('@color-mode');
+      return val === 'light' ? 'light' : 'dark';
+    } catch (e) {
+      return 'light';
+    }
+  },
+  set: async (value: any) => {
+    try {
+      await AsyncStorage.setItem('@color-mode', value);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+};
 
 function ToggleDarkMode() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -30,19 +48,23 @@ function ToggleDarkMode() {
     </HStack>
   );
 }
+
 const App = () => {
+
+  React.useEffect(() => {
+    SplashScreen.hide();
+  });
+
   return (
-    <NativeBaseProvider >
+    <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
       <Center
-        _dark={{ bg: '#202023' }}
-        _light={{ bg: '#f0e7db' }}
+        _dark={{ bg: theme.colorModeValues.dark }}
+        _light={{ bg: theme.colorModeValues.light }}
         px={4}
         flex={1}
         w="100%">
         <Login />
         <ToggleDarkMode />
-        {/* <VStack space={5} alignItems="center"> */}
-        {/* </VStack> */}
       </Center>
     </NativeBaseProvider>
   );

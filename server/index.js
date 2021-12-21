@@ -1,48 +1,21 @@
 const express = require('express');
+const db = require('./db')
+const mqtt = require('./mqtt/connectMqtt')
+const logger = require('./logger')
+
 const app = express();
-const cors = require("cors");
-const mqtt = require('mqtt');
-// const pool = require("./db");
-const { Client,Pool } = require("pg");
-const connectionString = 'postgres://postgres:shivam@localhost:5432/covmon';
-const sqlClient = new Client({
-    connectionString: connectionString
+
+app.listen(5000, (req, res) => {
+  logger.info("Connected on port 5000!!")
 });
-sqlClient.connect();
 
-
-//middleware
-app.use(express.json());   
-app.use(cors());
-
-//routes//
-
-//create
-
-
-//get
-
-
-
-
-
-let client = mqtt.connect('mqtt://127.0.0.1:1883', { clientId: "mqttjs01", username: 'Anmol' });
-
-client.on('connect', () => {
-    console.log('Connected')
-    client.subscribe("Temperature", (topic) => {
-      console.log(`Subscribe to topic ${topic}`);
-    })
-})
-
-client.on('message', (topic, payload) => {
-    console.log('Received Message:', topic, payload.toString())
-  })
-
-
-  app.listen(5000,(req,res) => {
-    console.log("Connected on port 5000!!")
-  })
-
-
-
+(async () => {
+  try {
+    logger.info('Checking db migrations...');
+    await db.migrate.latest().then(() => {
+      logger.info('migrations complete');
+    });
+  } catch (e) {
+    console.log(e);
+  }
+})();

@@ -47,6 +47,8 @@ const font = {
      },
 }
 
-const theme = extendTheme({ config, colorModeValues, font });
+const colors = {globalColor:"#8fa7df"};
+
+const theme = extendTheme({ config, colorModeValues, font , colors });
 
 export default theme;

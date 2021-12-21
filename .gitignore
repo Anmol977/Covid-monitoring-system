@@ -3,7 +3,7 @@ server/node_modules
 MyApp/node_modules
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 
@@ -23,3 +23,47 @@ MyApp/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Gradle
+/build/
+/MyApp/android/app/build/
+/MyApp/android/app/gradle/
+/MyApp/android/app/gradlew
+/MyApp/android/app/gradlew.bat
+/ReactAndroid/build/
+/ReactAndroid/gradle/
+/ReactAndroid/gradlew
+/ReactAndroid/gradlew.bat
+
+# Android Studio
+.project
+.settings
+.classpath
+
+# Android
+.idea
+.gradle
+local.properties
+*.iml
+/android/
+
+# Node
+node_modules
+*.log
+.nvm
+/bots/node_modules/
+package-lock.json
+
+# Test generated files
+/ReactAndroid/src/androidTest/assets/AndroidTestBundle.js
+*.js.meta
+
+/coverage
+/third-party
+
+# Visual studio
+.vscode
+.vs
+
+# Android memory profiler files
+*.hprof

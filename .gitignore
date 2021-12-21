@@ -1,6 +1,6 @@
 values.h
 server/node_modules
-app_src/MyApp/node_modules
+MyApp/node_modules
 
 # dependencies
 /node_modules

@@ -18,7 +18,7 @@ app.use(express.json());
 })();
 
 app.listen(5000, (req, res) => {
-  logger.info("Connected on port 5000")
+  logger.info("server running on port : 5000")
 });
 
 app.use(userRoutes);

@@ -5,10 +5,11 @@ const logger = require('../logger');
 const { signupValidation, logInValidation } = require('./validations');
 const { userEmailExists, userPhoneExists, create, getUserDetails } = require('../stores/userStore');
 
-router.post('/signUp', async (req, res, next) => {
+router.post('/signUp', async (req, res) => {
      const { error } = signupValidation(req.body)
      let user;
      if (error) {
+          logger.error(error);
           return res.status(400).send(error.details[0].message);
      } else {
           try {
@@ -37,25 +38,28 @@ router.post('/signUp', async (req, res, next) => {
                               }
                          );
                }
-               user = await create({ email, phoneNumber, dob, fullName, scope, password, roomNo });
+               let userId = await create({ email, phoneNumber, dob, fullName, scope, password, roomNo });
+               user = await getUserDetails(userId[0]);
                logger.info(`user created successfully, id : ${user[0].id}`);
                return res
                     .status(200)
                     .send(
                          {
                               message: 'user created successfully',
-                              data: user
+                              data: user[0]
                          }
                     )
           } catch (e) {
+               logger.error(e)
                return res.send({ message: e, data: null });
           }
      }
 })
 
-router.post('/login/email', async (req, res, next) => {
+router.post('/login/email', async (req, res) => {
      const { error } = logInValidation(req.body);
      if (error) {
+          logger.error(error);
           return res.status(400).send(error.details[0].message);
      } else {
           try {
@@ -89,6 +93,7 @@ router.post('/login/email', async (req, res, next) => {
                     }
                }
           } catch (e) {
+               logger.error(e);
                return res
                     .status(400)
                     .send({

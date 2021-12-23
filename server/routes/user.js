@@ -38,7 +38,7 @@ router.post('/signUp', async (req, res, next) => {
                          );
                }
                user = await create({ email, phoneNumber, dob, fullName, scope, password, roomNo });
-               logger.info(`user created successfully, id : ${user.id}`);
+               logger.info(`user created successfully, id : ${user[0].id}`);
                return res
                     .status(200)
                     .send(

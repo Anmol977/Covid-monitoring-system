@@ -5,7 +5,7 @@ module.exports = {
      create: async ({ email, fullName, password, dob, phoneNumber, roomNo, scope }) => {
           email = email.toLowerCase();
           password = await bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-          return db('Users').insert({ email, fullName, password, dob, phoneNumber, roomNo, scope }).returning('*');
+          return db('Users').insert({ email, fullName, password, dob, phoneNumber, roomNo, scope }).returning('id');
      },
      checkUserExists: (id) => {
           return db('Users').where({ id }).first();
@@ -17,6 +17,6 @@ module.exports = {
           return db('Users').where({ phoneNumber }).first();
      },
      getUserDetails: (id) => {
-          return db('Users').where({ id }).returning('*');
+          return db('Users').select('id', 'email', 'phoneNumber', 'roomNo', 'scope', 'dob', 'fullName', 'SpO2', 'temperature', 'heartRate').where({ id });
      }
 }

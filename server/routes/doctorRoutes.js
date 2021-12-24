@@ -42,6 +42,8 @@ router.post('/doctor/signUp', async (req, res) => {
                let userId = await create({ email, phoneNumber, fullName, password });
                user = await getDoctorDetails(userId[0]);
                logger.info(`user created successfully, id : ${user.id}`);
+               let token = generateUserToken({ id: userDetails.id, email: userDetails.email });
+               res.cookie('authorization', token, { httpOnly: true });
                return res
                     .status(200)
                     .send(

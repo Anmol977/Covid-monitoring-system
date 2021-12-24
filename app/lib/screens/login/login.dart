@@ -1,3 +1,4 @@
+import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
@@ -13,7 +14,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final FocusNode focusNode = FocusNode();
-  bool obscureText = false;
+  final _formKey = GlobalKey<FormState>();
+  bool obscureText = true;
+  String email = Strings.empty, password = Strings.empty;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 0.05.sw),
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -34,7 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      email = value!;
+                    },
                     onFieldSubmitted: (_) {
                       focusNode.requestFocus();
                     },
@@ -56,7 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      password = value!;
+                    },
                     maxLength: 50,
                     decoration: InputDecoration(
                       suffixIcon: GestureDetector(
@@ -78,9 +86,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: 40.h),
                   TextButton(
-                    onPressed: () {
-                      //Form save here
-                      Navigator.pushReplacementNamed(context, Routes.home);
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        await Api.patientLogin(
+                          email,
+                          password,
+                        );
+                        /* Navigator.pushReplacementNamed(context, Routes.home); */
+                      }
                     },
                     child: const Text(Strings.login),
                   ),

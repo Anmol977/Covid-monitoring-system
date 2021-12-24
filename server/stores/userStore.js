@@ -17,6 +17,6 @@ module.exports = {
           return db('Users').where({ phoneNumber }).first();
      },
      getUserDetails: (id) => {
-          return db('Users').select('id', 'email', 'phoneNumber', 'roomNo', 'scope', 'dob', 'fullName', 'SpO2', 'temperature', 'heartRate').where({ id });
+          return db('Users').select('id', 'email', 'phoneNumber', 'roomNo', 'scope', 'dob', 'fullName', 'SpO2', 'temperature', 'heartRate').where({ id }).first();
      }
 }

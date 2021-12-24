@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const logger = require('../logger');
 const { signupValidation, logInValidation } = require('./validations');
 const { userEmailExists, userPhoneExists, create, getUserDetails } = require('../stores/userStore');
+const generateUserToken = require('../auth/jwt');
 
 router.post('/signUp', async (req, res) => {
      const { error } = signupValidation(req.body)
@@ -77,11 +78,13 @@ router.post('/login/email', async (req, res) => {
                     let userDetails = await getUserDetails(emailExists.id);
                     let passwordMatch = bcrypt.compareSync(password, emailExists.password);
                     if (passwordMatch) {
+                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email });
+                         res.cookie('authorization', token, { httpOnly: true })
                          return res
                               .status(200)
                               .send({
                                    message: 'Logged In successfully',
-                                   data: userDetails
+                                   data: userDetails,
                               })
                     } else {
                          return res

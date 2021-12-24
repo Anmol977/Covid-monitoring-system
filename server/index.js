@@ -1,8 +1,9 @@
+require('dotenv').config()
 const express = require('express');
-const db = require('./db')
-const mqtt = require('./mqtt/connectMqtt')
-const logger = require('./logger')
-const userRoutes = require('./routes/user')
+const db = require('./db');
+const mqtt = require('./mqtt/connectMqtt');
+const logger = require('./logger');
+const userRoutes = require('./routes/user');
 
 const app = express();
 app.use(express.json());

@@ -1,12 +1,10 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../logger')
 
-function generateUserToken(id, email) {
+function generateUserToken(userDetails) {
      try {
           let token = jwt.sign(
-               {
-                    id, email
-               }
+               userDetails
                , process.env.ACCESS_TOKEN_SECRET,
                {
                     expiresIn: process.env.ACCESS_TOKEN_LIFE

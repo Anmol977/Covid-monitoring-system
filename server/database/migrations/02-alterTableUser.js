@@ -3,7 +3,7 @@ exports.up = function (knex) {
           knex.schema.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'),
 
 
-          knex.schema.alterTable('Users', function (table) {
+          knex.schema.alterTable('Paitents', function (table) {
                table.text('roomNo').alter();
           })
      ])
@@ -12,7 +12,7 @@ exports.up = function (knex) {
 exports.down = function (knex) {
      return Promise.all([
 
-          knex.raw('DROP TABLE IF EXISTS public."Reviews" CASCADE'),
+          knex.raw('DROP TABLE IF EXISTS public."Patients" CASCADE'),
 
      ])
 }

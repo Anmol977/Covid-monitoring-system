@@ -3,7 +3,8 @@ const express = require('express');
 const db = require('./db');
 const mqtt = require('./mqtt/connectMqtt');
 const logger = require('./logger');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/patientRoutes');
+const doctorRoutes = require('./routes/doctorRoutes')
 
 const app = express();
 app.use(express.json());
@@ -22,4 +23,4 @@ app.listen(5000, (req, res) => {
   logger.info("server running on port : 5000")
 });
 
-app.use(userRoutes);
+app.use(userRoutes, doctorRoutes);

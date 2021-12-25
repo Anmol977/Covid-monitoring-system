@@ -21,11 +21,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool obscureText = true, obscureConfirmText = true;
+  bool obscureText = true, obscureConfirmText = true, isDoctor = false;
   String email = Strings.empty,
       name = Strings.empty,
       password = Strings.empty,
-      confirmPassword = Strings.empty;
+      confirmPassword = Strings.empty,
+      phoneNumber = Strings.empty,
+      roomNo = Strings.empty;
+  DateTime dob = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,27 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 0.2.sh),
+                  isDoctor
+                      ? SizedBox(height: 0.07.sh)
+                      : SizedBox(height: 0.02.sh),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(Strings.loginAs),
+                      SizedBox(width: 0.05.sw),
+                      const Text(Strings.patient),
+                      Switch(
+                        value: isDoctor,
+                        onChanged: (value) {
+                          setState(() {
+                            isDoctor = value;
+                          });
+                        },
+                      ),
+                      const Text(Strings.doctor),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -154,18 +177,86 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     textInputAction: TextInputAction.done,
                   ),
+                  SizedBox(height: 30.h),
+                  isDoctor
+                      ? TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return Strings.enterPhone;
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            phoneNumber = value!;
+                          },
+                          maxLength: 50,
+                          decoration: const InputDecoration(
+                            counterText: Strings.empty,
+                            labelText: Strings.phoneNumber,
+                            hintText: Strings.phoneNumber,
+                          ),
+                          textInputAction: TextInputAction.done,
+                        )
+                      : TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return Strings.enterRoom;
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            roomNo = value!;
+                          },
+                          maxLength: 50,
+                          decoration: const InputDecoration(
+                            counterText: Strings.empty,
+                            labelText: Strings.roomNumber,
+                            hintText: Strings.roomNumber,
+                          ),
+                          textInputAction: TextInputAction.done,
+                        ),
+                  SizedBox(height: 30.h),
+                  isDoctor
+                      ? Container()
+                      : TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return Strings.enterDob;
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            roomNo = value!;
+                          },
+                          maxLength: 50,
+                          decoration: const InputDecoration(
+                            counterText: Strings.empty,
+                            labelText: Strings.dob,
+                            hintText: Strings.dob,
+                          ),
+                          textInputAction: TextInputAction.done,
+                        ),
                   SizedBox(height: 40.h),
                   TextButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        await Api.patientSignup(
-                          email,
-                          name,
-                          password,
-                          "10/02/2002",
-                          "201",
-                        );
+                        if (isDoctor) {
+                          await Api.doctorSignup(
+                            email,
+                            name,
+                            password,
+                            "8800527903",
+                          );
+                        } else {
+                          await Api.patientSignup(
+                            email,
+                            name,
+                            password,
+                            "10/02/2002",
+                            "201",
+                          );
+                        }
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }
                     },

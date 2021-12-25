@@ -15,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final FocusNode focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  bool obscureText = true;
+  bool obscureText = true, isDoctor = false;
   String email = Strings.empty, password = Strings.empty;
 
   @override
@@ -31,6 +31,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 0.3.sh),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(Strings.loginAs),
+                      SizedBox(width: 0.05.sw),
+                      const Text(Strings.patient),
+                      Switch(
+                        value: isDoctor,
+                        onChanged: (value) {
+                          setState(() {
+                            isDoctor = value;
+                          });
+                        },
+                      ),
+                      const Text(Strings.doctor),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -89,10 +107,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        await Api.patientLogin(
-                          email,
-                          password,
-                        );
+                        if (isDoctor) {
+                          await Api.doctorLogin(
+                            email,
+                            password,
+                          );
+                        } else {
+                          await Api.patientLogin(
+                            email,
+                            password,
+                          );
+                        }
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }
                     },

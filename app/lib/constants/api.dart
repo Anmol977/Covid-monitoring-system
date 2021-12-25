@@ -9,6 +9,9 @@ class Api {
   static const String _patientLogin = "patient/login/email";
   static const String _patientSignup = "patient/signUp";
 
+  static const String _doctorLogin = "doctor/login/email";
+  static const String _doctorSignup = "doctor/signUp";
+
   static Future<void> patientSignup(String email, String name, String password,
       String dob, String roomNo) async {
     http.Response response = await http.post(
@@ -30,6 +33,36 @@ class Api {
   ) async {
     http.Response response = await http.post(
       Uri.parse(_host + _patientLogin),
+      body: {
+        Parameters.email: email.trim(),
+        Parameters.password: password.trim(),
+      },
+    );
+    print(response.body);
+    // May cause errors
+    print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
+  }
+
+  static Future<void> doctorSignup(
+      String email, String name, String password, String phoneNumber) async {
+    http.Response response = await http.post(
+      Uri.parse(_host + _doctorSignup),
+      body: {
+        Parameters.email: email.trim(),
+        Parameters.fullName: name.trim(),
+        Parameters.password: password.trim(),
+        Parameters.phoneNumber: phoneNumber.trim(),
+      },
+    );
+    print(response.body);
+  }
+
+  static Future<void> doctorLogin(
+    String email,
+    String password,
+  ) async {
+    http.Response response = await http.post(
+      Uri.parse(_host + _doctorLogin),
       body: {
         Parameters.email: email.trim(),
         Parameters.password: password.trim(),

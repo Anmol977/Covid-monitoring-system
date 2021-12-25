@@ -17,7 +17,7 @@ router.post('/patient/signUp', async (req, res) => {
           try {
                const { email, phoneNumber, dob, fullName, password, roomNo } = req.body;
                let userExists = await checkPatientExists(email);
-               if (userExists) {
+               if (userExists.rows[0].sumcount != 0) {
                     logger.info(`email ${email} or number ${phoneNumber} already exists, could not sign-up`);
                     return res
                          .status(400)
@@ -57,7 +57,6 @@ router.post('/patient/login/email', async (req, res) => {
           try {
                const { email, password } = req.body;
                let emailExists = await patientEmailExists(email);
-               console.log(emailExists);
                if (!emailExists) {
                     return res
                          .status(400)

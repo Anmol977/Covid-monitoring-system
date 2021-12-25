@@ -17,7 +17,7 @@ router.post('/doctor/signUp', async (req, res) => {
           try {
                const { email, phoneNumber, fullName, password } = req.body;
                let userExists = await checkDoctorExists(email, phoneNumber);
-               if (userExists) {
+               if (userExists.rows.sumcount != 0) {
                     logger.info(`email ${email} or number ${phoneNumber} already exists, could not sign-up`);
                     return res
                          .status(400)

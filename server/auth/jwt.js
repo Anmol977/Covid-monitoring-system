@@ -15,4 +15,14 @@ function generateUserToken(userDetails) {
      }
 }
 
-module.exports = generateUserToken;
+function validateJwtToken(token, res, next) {
+     try {
+          var decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+          return decoded;
+     } catch (e) {
+          res.status(403).send(e);
+          next();
+     }
+}
+
+module.exports = { generateUserToken, validateJwtToken };

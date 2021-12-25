@@ -3,8 +3,9 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const logger = require('../logger');
 const { patientSignupValidation, patientLogInValidation } = require('./patientValidations');
-const { patientEmailExists, patientPhoneExists, create, getPatientDetails } = require('../stores/patientStore');
-const generateUserToken = require('../auth/jwt');
+const { patientEmailExists, patientPhoneExists, create, getPatientDetails, checkPatientExists } = require('../stores/patientStore');
+const { generateUserToken, validateJwtToken } = require('../auth/jwt');
+const utils = require('../utils');
 
 router.post('/patient/signUp', async (req, res) => {
      const { error } = patientSignupValidation(req.body)
@@ -15,27 +16,15 @@ router.post('/patient/signUp', async (req, res) => {
      } else {
           try {
                const { email, phoneNumber, dob, fullName, password, roomNo } = req.body;
-               let emailExists = await patientEmailExists(email);
-               let phoneExists = await patientPhoneExists(phoneNumber);
-               if (emailExists) {
-                    logger.info(`email ${email} already exists, unsuccessful signup attempt`);
+               let userExists = await checkPatientExists(email);
+               if (userExists) {
+                    logger.info(`email ${email} or number ${phoneNumber} already exists, could not sign-up`);
                     return res
                          .status(400)
                          .send(
                               {
-                                   error: `email ${email} already exists`,
-                                   data: null
-                              }
-                         );
-               }
-               if (phoneExists) {
-                    logger.info(`number ${phoneNumber} already exists, unsuccessful signup attempt`);
-                    return res
-                         .status(400)
-                         .send(
-                              {
-                                   error: `number ${phoneNumber} already exists`,
-                                   data: null
+                                   error: utils.staticVars.SIGNUP_ERROR,
+                                   message: utils.staticVars.ALREADY_EXISTS
                               }
                          );
                }
@@ -54,7 +43,7 @@ router.post('/patient/signUp', async (req, res) => {
                     )
           } catch (e) {
                logger.error(e)
-               return res.send({ message: e, data: null });
+               return res.status(500).send({ message: e, data: null });
           }
      }
 })
@@ -100,7 +89,7 @@ router.post('/patient/login/email', async (req, res) => {
           } catch (e) {
                logger.error(e);
                return res
-                    .status(400)
+                    .status(500)
                     .send({
                          message: e,
                          data: null

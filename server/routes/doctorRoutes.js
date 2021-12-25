@@ -3,8 +3,9 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const logger = require('../logger');
 const { doctorSignupValidation, doctorLogInValidation } = require('./doctorValidations');
-const { doctorEmailExists, doctorPhoneExists, create, getDoctorDetails } = require('../stores/doctorStore');
-const generateUserToken = require('../auth/jwt');
+const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = require('../stores/doctorStore');
+const { generateUserToken, validateJwtToken } = require('../auth/jwt');
+const utils = require('../utils');
 
 router.post('/doctor/signUp', async (req, res) => {
      const { error } = doctorSignupValidation(req.body)
@@ -15,46 +16,36 @@ router.post('/doctor/signUp', async (req, res) => {
      } else {
           try {
                const { email, phoneNumber, fullName, password } = req.body;
-               let emailExists = await doctorEmailExists(email);
-               if (emailExists) {
-                    logger.info(`email ${email} already exists, unsuccessful signup attempt`);
+               let userExists = await checkDoctorExists(email, phoneNumber);
+               if (userExists) {
+                    logger.info(`email ${email} or number ${phoneNumber} already exists, could not sign-up`);
                     return res
                          .status(400)
                          .send(
                               {
-                                   error: `email ${email} already exists`,
-                                   data: null
+                                   error: utils.staticVars.SIGNUP_ERROR,
+                                   message: utils.staticVars.ALREADY_EXISTS
                               }
                          );
                }
-               let phoneExists = await doctorPhoneExists(phoneNumber);
-               if (phoneExists) {
-                    logger.info(`number ${phoneNumber} already exists, unsuccessful signup attempt`);
+               else {
+                    let userId = await create({ email, phoneNumber, fullName, password });
+                    user = await getDoctorDetails(userId[0]);
+                    logger.info(`user created successfully, id : ${user.id}`);
+                    let token = generateUserToken({ id: user.id, email: user.email });
+                    res.cookie('authorization', token, { httpOnly: true });
                     return res
-                         .status(400)
+                         .status(200)
                          .send(
                               {
-                                   error: `number ${phoneNumber} already exists`,
-                                   data: null
+                                   message: 'user created successfully',
+                                   data: user
                               }
-                         );
+                         )
                }
-               let userId = await create({ email, phoneNumber, fullName, password });
-               user = await getDoctorDetails(userId[0]);
-               logger.info(`user created successfully, id : ${user.id}`);
-               let token = generateUserToken({ id: userDetails.id, email: userDetails.email });
-               res.cookie('authorization', token, { httpOnly: true });
-               return res
-                    .status(200)
-                    .send(
-                         {
-                              message: 'user created successfully',
-                              data: user
-                         }
-                    )
           } catch (e) {
                logger.error(e)
-               return res.send({ message: e, data: null });
+               return res.status(500).send({ message: e, data: null });
           }
      }
 })
@@ -100,7 +91,7 @@ router.post('/doctor/login/email', async (req, res) => {
           } catch (e) {
                logger.error(e);
                return res
-                    .status(400)
+                    .status(500)
                     .send({
                          message: e,
                          data: null
@@ -108,6 +99,26 @@ router.post('/doctor/login/email', async (req, res) => {
           }
      }
 })
+
+router.get('/doctor/details', async (req, res, next) => {
+     try {
+          const token = req.headers.authorization;
+          const payload = validateJwtToken(token, res, next);
+          if (typeof payload !== 'undefined') {
+               let doctorDetails = await getDoctorDetails(payload.id);
+               if (doctorDetails) {
+                    res.status(200).send({ message: utils.staticVars.SUCCESS_FETCH, doctorDetails });
+               } else {
+                    res.status(404).send({ message: utils.staticVars.GENERAL_ERROR });
+               }
+          }
+     } catch (e) {
+          logger.error(e);
+          res.status(500).send({ message: e });
+     }
+})
+
+
 
 
 module.exports = router;

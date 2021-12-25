@@ -10,17 +10,17 @@ var bodyParser = require('body-parser');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-  (async () => {
-    try {
-      await db.migrate.latest().then(() => {
-        logger.info('database migrations complete...');
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  })();
+(async () => {
+  try {
+    await db.migrate.latest().then(() => {
+      logger.info('database migrations complete...');
+    });
+  } catch (e) {
+    console.log(e);
+  }
+})();
 
 app.listen(5000, (req, res) => {
   logger.info("server running on port : 5000")

@@ -7,14 +7,22 @@ module.exports = {
           password = await bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
           return db('Patients').insert({ email, fullName, password, dob, phoneNumber, roomNo }).returning('id');
      },
-     checkPatientExists: (id) => {
-          return db('Patients').where({ id }).first();
+     checkPatientExists: (email, phoneNumber) => {
+          let rawQuery = `SELECT (SELECT COUNT(patients."id") 
+                         FROM public."Patients" as patients
+                         WHERE  patients."email" = '${email}' OR patients."phoneNumber" = '${phoneNumber}')
+                         +
+                         (SELECT COUNT(doctors."id") 
+                         FROM public."Doctors" as doctors
+                         WHERE  doctors."email" = '${email}' OR doctors."phoneNumber" = '${phoneNumber}')
+                         as sumCount`;
+          return db.raw(rawQuery);
      },
      patientEmailExists: (email) => {
-          return db('Patients').where({ email }).first();
+          return db('Patients').where({ email }).count();
      },
      patientPhoneExists: (phoneNumber) => {
-          return db('Patients').where({ phoneNumber }).first();
+          return db('Patients').where({ phoneNumber }).count();
      },
      getPatientDetails: (id) => {
           return db('Patients').select('id', 'email', 'phoneNumber', 'roomNo', 'dob', 'fullName', 'SpO2', 'temperature', 'heartRate', 'status').where({ id }).first();

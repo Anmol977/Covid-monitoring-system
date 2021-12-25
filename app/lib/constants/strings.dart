@@ -19,6 +19,7 @@ class Strings {
   static const String doctor = 'Doctor';
   static const String patient = 'Patient';
   static const String loginAs = 'Login as:';
+  static const String signupAs = 'Sign Up as:';
 
   static const String enterName = 'Please enter your Full Name';
   static const String enterPhone = 'Please enter your Phone Number';

@@ -48,7 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(Strings.loginAs),
+                      const Text(Strings.signupAs),
                       SizedBox(width: 0.05.sw),
                       const Text(Strings.patient),
                       Switch(

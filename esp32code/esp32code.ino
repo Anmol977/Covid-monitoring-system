@@ -7,7 +7,7 @@
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
 
-#define DELAY 500
+#define DELAY 5000
 #define SENSOR_PIN 21
 
 uint32_t tsLastReport = 0;
@@ -90,6 +90,10 @@ void setup()
 
 void senseTemperature()
 {
+  bool test = client.publish(topic, "Moshi Moshi"); //testing
+  if (test) {
+    Serial.println("Test Success");
+  }
   DS18B20.requestTemperatures();
   tempC = DS18B20.getTempCByIndex(0);
   tempF = DS18B20.getTempFByIndex(0);
@@ -101,7 +105,7 @@ void senseTemperature()
     Serial.println(tempC);
     String payload_temp;
     payload_temp += tempC;
-    temp_res = client.publish("Temperature", (char *)payload_temp.c_str());
+    temp_res = client.publish("esp32/temp", (char *)payload_temp.c_str());
 
     if (temp_res)
     {

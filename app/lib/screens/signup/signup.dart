@@ -1,3 +1,4 @@
+import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
@@ -18,7 +19,13 @@ class _SignupScreenState extends State<SignupScreen> {
     FocusNode(),
   ];
 
-  bool obscureText = false, obscureConfirmText = false;
+  final _formKey = GlobalKey<FormState>();
+
+  bool obscureText = true, obscureConfirmText = true;
+  String email = Strings.empty,
+      name = Strings.empty,
+      password = Strings.empty,
+      confirmPassword = Strings.empty;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +35,7 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 0.05.sw),
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -35,11 +43,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return Strings.enterEmail;
+                        return Strings.enterName;
                       }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      name = value!;
+                    },
                     onFieldSubmitted: (_) {
                       focusNodes[0].requestFocus();
                     },
@@ -60,7 +70,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      email = value!;
+                    },
                     onFieldSubmitted: (_) {
                       focusNodes[1].requestFocus();
                     },
@@ -82,7 +94,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      password = value!;
+                    },
                     onFieldSubmitted: (_) {
                       focusNodes[2].requestFocus();
                     },
@@ -113,9 +127,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       if (value == null || value.isEmpty) {
                         return Strings.confirmPassword;
                       }
+                      if (password != confirmPassword) {
+                        return Strings.passwordMismatch;
+                      }
                       return null;
                     },
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      confirmPassword = value!;
+                    },
                     maxLength: 50,
                     decoration: InputDecoration(
                       suffixIcon: GestureDetector(
@@ -137,9 +156,18 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   SizedBox(height: 40.h),
                   TextButton(
-                    onPressed: () {
-                      //Form save here
-                      Navigator.pushReplacementNamed(context, Routes.home);
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        await Api.patientSignup(
+                          email,
+                          name,
+                          password,
+                          "10/02/2002",
+                          "201",
+                        );
+                        /* Navigator.pushReplacementNamed(context, Routes.home); */
+                      }
                     },
                     child: const Text(Strings.signup),
                   ),

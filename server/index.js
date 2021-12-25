@@ -5,7 +5,7 @@ const mqtt = require('./mqtt/connectMqtt');
 const logger = require('./logger');
 const userRoutes = require('./routes/patientRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
 const app = express();
 

@@ -14,6 +14,8 @@ class Strings {
   static const String alreadyAccount = 'Already have an account?';
   static const String signup = 'SignUp';
 
+  static const String enterName = 'Please enter your Full Name';
   static const String enterEmail = 'Please enter the e-mail';
   static const String enterPassword = 'Please enter the password';
+  static const String passwordMismatch = 'Passwords don\'t match';
 }

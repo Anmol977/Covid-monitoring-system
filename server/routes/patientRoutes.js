@@ -57,6 +57,7 @@ router.post('/patient/login/email', async (req, res) => {
           try {
                const { email, password } = req.body;
                let emailExists = await patientEmailExists(email);
+               console.log(emailExists);
                if (!emailExists) {
                     return res
                          .status(400)

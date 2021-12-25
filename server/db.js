@@ -3,8 +3,8 @@ const knex = require('knex')({
     connection: {
         host: 'localhost',
         port: 5432,
-        user: 'postgres',
-        password: 'shivam',
+        user: process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASS,
         database: 'covmon'
     },
     migrations: {

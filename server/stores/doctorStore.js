@@ -20,10 +20,10 @@ module.exports = {
           return db.raw(rawQuery);
      },
      doctorEmailExists: (email) => {
-          return db('Doctors').where({ email }).count();
+          return db('Doctors').where({ email }).first();
      },
      doctorPhoneExists: (phoneNumber) => {
-          return db('Doctors').where({ phoneNumber }).count();
+          return db('Doctors').where({ phoneNumber }).first();
      },
      getDoctorDetails: (id) => {
           return db('Doctors').select('id', 'email', 'phoneNumber', 'fullName', 'patientsAssigned').where({ id }).first();

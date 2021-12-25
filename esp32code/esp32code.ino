@@ -4,15 +4,8 @@
 #include "values.h"
 #include <iostream>
 #include <OneWire.h>
-#include <MAX30100.h>
 #include <PubSubClient.h>
-#include <CircularBuffer.h>
-#include <MAX30100_Filters.h>
 #include <DallasTemperature.h>
-#include <MAX30100_Registers.h>
-#include <MAX30100_BeatDetector.h>
-#include <MAX30100_PulseOximeter.h>
-#include <MAX30100_SpO2Calculator.h>
 
 #define DELAY 500
 #define SENSOR_PIN 21
@@ -32,7 +25,6 @@ bool temp_res;
 
 WiFiClient espClient;
 OneWire oneWire(SENSOR_PIN);
-PulseOximeter pulseOxymeter;
 PubSubClient client(espClient);
 DallasTemperature DS18B20(&oneWire);
 
@@ -44,7 +36,7 @@ void ConnectToWiFi()
   while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print("connecting... \n");
-    delay(500);
+    delay(1000);
   }
   Serial.print("Connected. My IP address is:");
   Serial.println(WiFi.localIP());
@@ -85,33 +77,10 @@ void connecttoMQTT()
   }
 }
 
-void onBeatDetected()
-{
-  Serial.println("Beat Detected!");
-}
-
-void initOxymeter()
-{
-  Wire.begin();
-  Serial.println("Testing MAX30100");
-  if (!pulseOxymeter.begin())
-  {
-    Serial.println("FAILED");
-    for (;;)
-      ;
-  }
-  else
-  {
-    Serial.println("SUCCESS");
-  }
-  pulseOxymeter.setOnBeatDetectedCallback(onBeatDetected);
-  pinMode(21, OUTPUT);
-}
-
 void setup()
 {
   Wire.begin();
-  Serial.begin(512000);
+  Serial.begin(500000);
   while (!Serial)
     ;
   ConnectToWiFi();
@@ -147,16 +116,6 @@ void senseTemperature()
 
 void loop()
 {
-  //  pulseOxymeter.update();
-  //  if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
-  //    Serial.print("Heart rate:");
-  //    Serial.print(pulseOxymeter.getHeartRate());
-  //    Serial.print("BPM / SPO2:");
-  //    Serial.print(pulseOxymeter.getSpO2());
-  //    Serial.println("%");
-  //
-  //    tsLastReport = millis();
-  //  }
   senseTemperature();
   delay(DELAY);
 }

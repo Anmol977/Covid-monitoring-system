@@ -2,6 +2,7 @@ import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
+import 'package:covmon/mqtt/mqttView.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -118,6 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             password,
                           );
                         }
+                        // Temporary for mqtt testing
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MQTTView()));
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }
                     },

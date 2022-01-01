@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import 'constants/routes.dart';
 import 'constants/strings.dart';
 import 'constants/theme.dart';
+import 'mqtt/MQTTAppState.dart';
 import 'screens/login/login.dart';
 
 void main() {
@@ -15,14 +17,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(393, 808),
-      builder: () => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: Strings.appTitle,
-        theme: theme(),
-        routes: routes,
-        home: const LoginScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => MQTTAppState(),
+        ),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(393, 808),
+        builder: () => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: Strings.appTitle,
+          theme: theme(),
+          routes: routes,
+          home: const LoginScreen(),
+        ),
       ),
     );
   }

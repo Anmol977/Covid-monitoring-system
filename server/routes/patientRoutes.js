@@ -24,7 +24,8 @@ router.post('/patient/signUp', async (req, res) => {
                          .send(
                               {
                                    error: utils.staticVars.SIGNUP_ERROR,
-                                   message: utils.staticVars.ALREADY_EXISTS
+                                   message: utils.staticVars.ALREADY_EXISTS,
+                                   data: null
                               }
                          );
                }
@@ -37,13 +38,14 @@ router.post('/patient/signUp', async (req, res) => {
                     .status(200)
                     .send(
                          {
+                              error: '',
                               message: 'user created successfully',
                               data: user
                          }
                     )
           } catch (e) {
                logger.error(e)
-               return res.status(500).send({ message: e, data: null });
+               return res.status(500).send({ error: e, data: null });
           }
      }
 })
@@ -61,7 +63,7 @@ router.post('/patient/login/email', async (req, res) => {
                     return res
                          .status(400)
                          .send({
-                              message: `email ${email} does not exist, failed to Log-In`,
+                              error: `email ${email} does not exist, failed to Log-In`,
                               data: null
                          })
                }
@@ -74,6 +76,7 @@ router.post('/patient/login/email', async (req, res) => {
                          return res
                               .status(200)
                               .send({
+                                   error: '',
                                    message: 'Logged In successfully',
                                    data: userDetails,
                               });
@@ -81,7 +84,7 @@ router.post('/patient/login/email', async (req, res) => {
                          return res
                               .status(400)
                               .send({
-                                   message: 'Incorrect Password, failed to Log-In',
+                                   error: 'Incorrect Password, failed to Log-In',
                                    data: null
                               });
                     }
@@ -91,7 +94,7 @@ router.post('/patient/login/email', async (req, res) => {
                return res
                     .status(500)
                     .send({
-                         message: e,
+                         error: e,
                          data: null
                     });
           }

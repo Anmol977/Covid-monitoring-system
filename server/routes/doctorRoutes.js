@@ -38,6 +38,7 @@ router.post('/doctor/signUp', async (req, res) => {
                          .status(200)
                          .send(
                               {
+                                   error: '',
                                    message: 'user created successfully',
                                    data: user
                               }
@@ -45,7 +46,7 @@ router.post('/doctor/signUp', async (req, res) => {
                }
           } catch (e) {
                logger.error(e)
-               return res.status(500).send({ message: e, data: null });
+               return res.status(500).send({ error: e, data: null });
           }
      }
 })
@@ -63,7 +64,7 @@ router.post('/doctor/login/email', async (req, res) => {
                     return res
                          .status(400)
                          .send({
-                              message: `email ${email} does not exist, failed to Log-In`,
+                              error: `email ${email} does not exist, failed to Log-In`,
                               data: null
                          })
                }
@@ -76,6 +77,7 @@ router.post('/doctor/login/email', async (req, res) => {
                          return res
                               .status(200)
                               .send({
+                                   error: '',
                                    message: 'Logged In successfully',
                                    data: userDetails,
                               });
@@ -83,7 +85,7 @@ router.post('/doctor/login/email', async (req, res) => {
                          return res
                               .status(400)
                               .send({
-                                   message: 'Incorrect Password, failed to Log-In',
+                                   error: 'Incorrect Password, failed to Log-In',
                                    data: null
                               });
                     }
@@ -93,7 +95,7 @@ router.post('/doctor/login/email', async (req, res) => {
                return res
                     .status(500)
                     .send({
-                         message: e,
+                         error: e,
                          data: null
                     });
           }
@@ -107,14 +109,14 @@ router.get('/doctor/details', async (req, res, next) => {
           if (typeof payload !== 'undefined') {
                let doctorDetails = await getDoctorDetails(payload.id);
                if (doctorDetails) {
-                    res.status(200).send({ message: utils.staticVars.SUCCESS_FETCH, doctorDetails });
+                    res.status(200).send({ error: '', message: utils.staticVars.SUCCESS_FETCH, doctorDetails });
                } else {
-                    res.status(404).send({ message: utils.staticVars.GENERAL_ERROR });
+                    res.status(404).send({ error: utils.staticVars.GENERAL_ERROR });
                }
           }
      } catch (e) {
           logger.error(e);
-          res.status(500).send({ message: e });
+          res.status(500).send({ error: e });
      }
 })
 

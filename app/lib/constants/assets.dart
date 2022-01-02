@@ -8,4 +8,5 @@ class Assets {
   static const String undraw1nobg =
       'assets/undraw_doctor_kw5l-removebg-preview.png';
   static const String undraw1svg = 'assets/undraw_doctor_kw-5-l (1).svg';
+  static const String undrawdocs = 'assets/undraw_doctors_hwty.svg';
 }

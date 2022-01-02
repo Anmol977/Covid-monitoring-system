@@ -16,11 +16,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final FocusNode focusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  bool obscureText = true, isDoctor = false;
+  bool obscureText = true;
   String email = Strings.empty, password = Strings.empty;
 
   @override
   Widget build(BuildContext context) {
+    final bool isDoctor = ModalRoute.of(context)!.settings.arguments as bool;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -32,24 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 0.3.sh),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(Strings.loginAs),
-                      SizedBox(width: 0.05.sw),
-                      const Text(Strings.patient),
-                      Switch(
-                        value: isDoctor,
-                        onChanged: (value) {
-                          setState(() {
-                            isDoctor = value;
-                          });
-                        },
-                      ),
-                      const Text(Strings.doctor),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -138,7 +121,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: inLineTextButtonTheme(),
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, Routes.signup);
+                            context,
+                            Routes.signup,
+                            arguments: isDoctor,
+                          );
                         },
                         child: const Text(Strings.signup),
                       ),

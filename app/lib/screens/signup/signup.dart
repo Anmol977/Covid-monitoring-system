@@ -21,7 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool obscureText = true, obscureConfirmText = true, isDoctor = false;
+  bool obscureText = true, obscureConfirmText = true;
   String email = Strings.empty,
       name = Strings.empty,
       password = Strings.empty,
@@ -32,6 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDoctor = ModalRoute.of(context)!.settings.arguments as bool;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -43,26 +44,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   isDoctor
-                      ? SizedBox(height: 0.07.sh)
-                      : SizedBox(height: 0.02.sh),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(Strings.signupAs),
-                      SizedBox(width: 0.05.sw),
-                      const Text(Strings.patient),
-                      Switch(
-                        value: isDoctor,
-                        onChanged: (value) {
-                          setState(() {
-                            isDoctor = value;
-                          });
-                        },
-                      ),
-                      const Text(Strings.doctor),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
+                      ? SizedBox(height: 0.1.sh)
+                      : SizedBox(height: 0.07.sh),
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -270,7 +253,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       TextButton(
                         style: inLineTextButtonTheme(),
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, Routes.login);
+                          Navigator.pushReplacementNamed(
+                            context,
+                            Routes.login,
+                            arguments: isDoctor,
+                          );
                         },
                         child: const Text(Strings.login),
                       ),

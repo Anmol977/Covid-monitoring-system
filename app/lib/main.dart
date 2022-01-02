@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           title: Strings.appTitle,
           theme: theme(),
           routes: routes,
-          home: const LoginScreen(),
+          initialRoute: Routes.select,
         ),
       ),
     );

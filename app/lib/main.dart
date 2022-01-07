@@ -6,7 +6,6 @@ import 'constants/routes.dart';
 import 'constants/strings.dart';
 import 'constants/theme.dart';
 import 'mqtt/MQTTAppState.dart';
-import 'screens/login/login.dart';
 
 void main() {
   runApp(const MyApp());

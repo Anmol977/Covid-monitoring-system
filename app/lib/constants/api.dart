@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'parameters.dart';
+import 'utils.dart';
 
 class Api {
   static const _ipaddress = "192.168.29.24";
@@ -12,8 +16,17 @@ class Api {
   static const String _doctorLogin = "doctor/login/email";
   static const String _doctorSignup = "doctor/signUp";
 
-  static Future<void> patientSignup(String email, String name, String password,
-      String dob, String roomNo) async {
+  static const String error = 'error';
+  static const String data = 'data';
+  static const String message = 'message';
+
+  static Future<Map<String, dynamic>> patientSignup(
+    String email,
+    String name,
+    String password,
+    String dob,
+    String roomNo,
+  ) async {
     http.Response response = await http.post(
       Uri.parse(_host + _patientSignup),
       body: {
@@ -24,10 +37,10 @@ class Api {
         Parameters.roomNo: roomNo.trim(),
       },
     );
-    print(response.body);
+    return json.decode(response.body);
   }
 
-  static Future<void> patientLogin(
+  static Future<Map<String, dynamic>> patientLogin(
     String email,
     String password,
   ) async {
@@ -38,13 +51,17 @@ class Api {
         Parameters.password: password.trim(),
       },
     );
-    print(response.body);
+    return json.decode(response.body);
     // May cause errors
-    print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
+    //print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
   }
 
-  static Future<void> doctorSignup(
-      String email, String name, String password, String phoneNumber) async {
+  static Future<Map<String, dynamic>> doctorSignup(
+    String email,
+    String name,
+    String password,
+    String phoneNumber,
+  ) async {
     http.Response response = await http.post(
       Uri.parse(_host + _doctorSignup),
       body: {
@@ -54,10 +71,10 @@ class Api {
         Parameters.phoneNumber: phoneNumber.trim(),
       },
     );
-    print(response.body);
+    return json.decode(response.body);
   }
 
-  static Future<void> doctorLogin(
+  static Future<Map<String, dynamic>> doctorLogin(
     String email,
     String password,
   ) async {
@@ -68,8 +85,8 @@ class Api {
         Parameters.password: password.trim(),
       },
     );
-    print(response.body);
+    return json.decode(response.body);
     // May cause errors
-    print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
+    //print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
   }
 }

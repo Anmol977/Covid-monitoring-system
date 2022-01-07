@@ -91,24 +91,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+                        Map<String, dynamic> response;
                         if (isDoctor) {
-                          await Api.doctorLogin(
+                          response = await Api.doctorLogin(
                             email,
                             password,
                           );
                         } else {
-                          await Api.patientLogin(
+                          response = await Api.patientLogin(
                             email,
                             password,
                           );
                         }
                         // Temporary for mqtt testing
-                        /* Navigator.push( */
-                        /*   context, */
-                        /*   MaterialPageRoute( */
-                        /*     builder: (context) => MQTTView(), */
-                        /*   ), */
-                        /* ); */
+                        if (!hasError(context, response)) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MQTTView(),
+                            ),
+                          );
+                        }
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }
                     },

@@ -68,6 +68,17 @@ class _SelectorScreenState extends State<SelectorScreen> {
                   ),
                 ],
               ),
+              SizedBox(height: 20.h),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: isDoctor,
+                  );
+                },
+                child: const Text(Strings.cont),
+              ),
               /* TextButton( */
               /*   onPressed: () { */
               /*     setState(() { */

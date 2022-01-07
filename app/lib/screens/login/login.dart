@@ -103,10 +103,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         }
                         // Temporary for mqtt testing
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MQTTView()));
+                        /* Navigator.push( */
+                        /*   context, */
+                        /*   MaterialPageRoute( */
+                        /*     builder: (context) => MQTTView(), */
+                        /*   ), */
+                        /* ); */
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }
                     },

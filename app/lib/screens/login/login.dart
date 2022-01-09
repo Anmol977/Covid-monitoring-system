@@ -52,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: Strings.email,
                       hintText: Strings.emailAddress,
                     ),
+                    keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                   ),
                   SizedBox(height: 30.h),

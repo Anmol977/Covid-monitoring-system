@@ -2,8 +2,11 @@ import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
+import 'package:covmon/mqtt/mqttView.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -27,8 +30,8 @@ class _SignupScreenState extends State<SignupScreen> {
       password = Strings.empty,
       confirmPassword = Strings.empty,
       phoneNumber = Strings.empty,
-      roomNo = Strings.empty;
-  DateTime dob = DateTime.now();
+      roomNo = Strings.empty,
+      dob = Strings.empty;
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +91,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       labelText: Strings.email,
                       hintText: Strings.emailAddress,
                     ),
+                    keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                   ),
                   SizedBox(height: 30.h),
@@ -178,6 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             labelText: Strings.phoneNumber,
                             hintText: Strings.phoneNumber,
                           ),
+                          keyboardType: TextInputType.phone,
                           textInputAction: TextInputAction.done,
                         )
                       : TextFormField(
@@ -208,36 +213,64 @@ class _SignupScreenState extends State<SignupScreen> {
                             }
                             return null;
                           },
+                          maxLength: 10,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(
+                                RegExp(r'[a-zA-Z]')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[/0-9]')),
+                          ],
                           onSaved: (value) {
-                            roomNo = value!;
+                            dob = value!;
                           },
-                          maxLength: 50,
                           decoration: const InputDecoration(
                             counterText: Strings.empty,
                             labelText: Strings.dob,
-                            hintText: Strings.dob,
+                            hintText: Strings.ddmmyyyy,
                           ),
                           textInputAction: TextInputAction.done,
                         ),
+                  /* InputDatePickerFormField( */
+                  /* initialDate: DateTime.now(), */
+                  /* firstDate: DateTime(1950), */
+                  /* lastDate: DateTime.now(), */
+                  /* onDateSaved: (value) { */
+                  /* dob = DateFormat('MM/dd/yyyy').format(value); */
+                  /* }, */
+                  /* errorFormatText: Strings.incorrectDateFormat, */
+                  /* errorInvalidText: Strings.invalidDate, */
+                  /* fieldHintText: Strings.ddmmyyyy, */
+                  /* fieldLabelText: Strings.dob, */
+                  /* ), */
                   SizedBox(height: 40.h),
                   TextButton(
                     onPressed: () async {
+                      _formKey.currentState!.save();
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+                        Map<String, dynamic> response;
                         if (isDoctor) {
-                          await Api.doctorSignup(
+                          response = await Api.doctorSignup(
                             email,
                             name,
                             password,
-                            "8800527903",
+                            phoneNumber,
                           );
                         } else {
-                          await Api.patientSignup(
+                          response = await Api.patientSignup(
                             email,
                             name,
                             password,
-                            "10/02/2002",
-                            "201",
+                            dob,
+                            roomNo,
+                          );
+                        }
+                        if (!hasError(context, response)) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MQTTView(),
+                            ),
                           );
                         }
                         /* Navigator.pushReplacementNamed(context, Routes.home); */

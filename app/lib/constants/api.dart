@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:covmon/constants/preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'parameters.dart';
-import 'utils.dart';
 
 class Api {
   static const _ipaddress = "192.168.29.24";
@@ -37,6 +36,10 @@ class Api {
         Parameters.roomNo: roomNo.trim(),
       },
     );
+    // Beauty chain
+    Token.setToken(
+      response.headers[Parameters.cookie]!.split(";")[0].split("=")[1],
+    );
     return json.decode(response.body);
   }
 
@@ -51,9 +54,11 @@ class Api {
         Parameters.password: password.trim(),
       },
     );
+    // Beauty chain
+    Token.setToken(
+      response.headers[Parameters.cookie]!.split(";")[0].split("=")[1],
+    );
     return json.decode(response.body);
-    // May cause errors
-    //print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
   }
 
   static Future<Map<String, dynamic>> doctorSignup(
@@ -71,6 +76,10 @@ class Api {
         Parameters.phoneNumber: phoneNumber.trim(),
       },
     );
+    // Beauty chain
+    Token.setToken(
+      response.headers[Parameters.cookie]!.split(";")[0].split("=")[1],
+    );
     return json.decode(response.body);
   }
 
@@ -85,8 +94,10 @@ class Api {
         Parameters.password: password.trim(),
       },
     );
+    // Beauty chain
+    Token.setToken(
+      response.headers[Parameters.cookie]!.split(";")[0].split("=")[1],
+    );
     return json.decode(response.body);
-    // May cause errors
-    //print(response.headers[Parameters.cookie]!.split(";")[0].split("=")[1]);
   }
 }

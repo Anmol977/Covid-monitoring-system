@@ -10,6 +10,7 @@ class Strings {
   static const String phoneNumber = 'Phone Number';
   static const String roomNumber = 'Room Number';
   static const String dob = 'Date of Birth';
+  static const String ddmmyyyy = 'DD/MM/YYYY';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm Password';
   static const String login = 'Log In';
@@ -22,6 +23,8 @@ class Strings {
   static const String signupAs = 'Sign Up as:';
   static const String continueAs = 'Proceed as ';
   static const String cont = 'Continue';
+  static const String incorrectDateFormat = 'Please enter in DD/MM/YYYY format';
+  static const String invalidDate = 'Date must be before current date';
 
   static const String enterName = 'Please enter your Full Name';
   static const String enterPhone = 'Please enter your Phone Number';
@@ -30,4 +33,6 @@ class Strings {
   static const String enterEmail = 'Please enter your e-mail';
   static const String enterPassword = 'Please enter your password';
   static const String passwordMismatch = 'Passwords don\'t match';
+
+  static const String token = 'token';
 }

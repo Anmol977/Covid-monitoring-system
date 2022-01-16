@@ -35,4 +35,11 @@ class Strings {
   static const String passwordMismatch = 'Passwords don\'t match';
 
   static const String token = 'token';
+
+  static const String home = 'Home';
+  static const String temperature = 'Temperature';
+  static const String spo2level = 'SpO2 Level';
+  static const String pulseRate = 'Pulse Rate';
+  static const String notifyDoctor = 'Notify Doctor';
+  static const String zero = '0';
 }

@@ -146,7 +146,7 @@ class _MQTTViewState extends State<MQTTView> {
   Widget _buildScrollableTextWith(String text) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Container(
+      child: SizedBox(
         width: 400,
         height: 200,
         child: SingleChildScrollView(

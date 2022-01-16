@@ -106,14 +106,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         // Temporary for mqtt testing
                         if (!hasError(context, response)) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MQTTView(),
-                            ),
-                          );
+                          if (isDoctor) {
+                            Navigator.pushReplacementNamed(
+                                context, Routes.doctorHome);
+                          } else {
+                            Navigator.pushReplacementNamed(
+                                context, Routes.patientHome);
+                          }
+                          /* Navigator.push( */
+                          /*   context, */
+                          /*   MaterialPageRoute( */
+                          /*     builder: (context) => MQTTView(), */
+                          /*   ), */
+                          /* ); */
                         }
-                        /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }
                     },
                     child: const Text(Strings.login),

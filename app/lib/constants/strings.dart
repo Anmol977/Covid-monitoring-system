@@ -1,5 +1,6 @@
 class Strings {
   static const String appTitle = "CovMon";
+  static const String fontFamily = "RobotoSlab";
 
   static const String empty = "";
 

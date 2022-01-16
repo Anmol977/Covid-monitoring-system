@@ -1,3 +1,4 @@
+import 'package:covmon/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,6 +12,7 @@ ThemeData theme() {
     appBarTheme: appBarTheme(),
     textButtonTheme: textButtonTheme(),
     elevatedButtonTheme: elevatedButtonTheme(),
+    fontFamily: Strings.fontFamily,
   );
 }
 

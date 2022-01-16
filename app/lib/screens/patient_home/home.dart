@@ -40,11 +40,14 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           child: FutureBuilder(
             future: MQTTBroker.configureMQTT(),
             builder: (context, snapshot) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              return GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0.05.sw,
+                crossAxisSpacing: 0.05.sw,
                 children: [
                   _buildPatientInfo(Strings.temperature, Strings.zero),
                   _buildPatientInfo(Strings.spo2level, Strings.zero),
+                  _buildPatientInfo(Strings.pulseRate, Strings.zero),
                   _buildPatientInfo(Strings.pulseRate, Strings.zero),
                 ],
               );
@@ -56,12 +59,29 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   }
 
   Widget _buildPatientInfo(String title, String data) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title),
-        Text(data),
-      ],
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.r),
+      ),
+      color: AppColors.tertiaryColor,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(title),
+            SizedBox(
+              height: 0.05.sw,
+            ),
+            Text(
+              data,
+              style: TextStyle(
+                fontSize: 50.sp,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -6,6 +6,8 @@ const { doctorSignupValidation, doctorLogInValidation } = require('./doctorValid
 const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = require('../stores/doctorStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const utils = require('../utils');
+const patientStore = require('../stores/patientStore');
+const { createGlobalSettings } = require('@angular/cli/utilities/config');
 
 router.post('/doctor/signUp', async (req, res) => {
      const { error } = doctorSignupValidation(req.body)
@@ -17,7 +19,8 @@ router.post('/doctor/signUp', async (req, res) => {
           try {
                const { email, phoneNumber, fullName, password } = req.body;
                let userExists = await checkDoctorExists(email, phoneNumber);
-               if (userExists.rows.sumcount != 0) {
+               console.log(userExists.rows[0].sumcount);
+               if (userExists.rows[0].sumcount != 0) {
                     logger.info(`email ${email} or number ${phoneNumber} already exists, could not sign-up`);
                     return res
                          .status(400)
@@ -72,7 +75,7 @@ router.post('/doctor/login/email', async (req, res) => {
                     let userDetails = await getDoctorDetails(emailExists.id);
                     let passwordMatch = bcrypt.compareSync(password, emailExists.password);
                     if (passwordMatch) {
-                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email });
+                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email, scope: 'Doctor' });
                          res.cookie('authorization', token, { httpOnly: true });
                          return res
                               .status(200)
@@ -120,7 +123,32 @@ router.get('/doctor/details', async (req, res, next) => {
      }
 })
 
-
-
+router.get('/patients/list', async (req, res, next) => {
+     try {
+          const token = req.headers.authorization;
+          const payload = validateJwtToken(token, res, next);
+          if (payload.scope === 'Doctor') {
+               let patientsList = await patientStore.getPatientsList();
+               res
+                    .status(200)
+                    .send({
+                         error: '',
+                         message: 'fetched patients list successfully',
+                         data: patientsList
+                    })
+          } else {
+               res
+                    .status(401)
+                    .send({
+                         error: utils.staticVars.SCOPE_ERROR,
+                         message: utils.staticVars.FETCH_ERROR,
+                         data: null
+                    })
+          }
+     } catch (e) {
+          logger.error(e);
+          res.status(500).send({ error: e });
+     }
+})
 
 module.exports = router;

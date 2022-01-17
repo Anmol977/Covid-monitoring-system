@@ -17,7 +17,9 @@ function generateUserToken(userDetails) {
 
 function validateJwtToken(token, res, next) {
      try {
-          var decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+          var authHeader = token.split(' ');
+          var authToken = authHeader[1];
+          const decoded = jwt.verify(authToken, process.env.ACCESS_TOKEN_SECRET);
           return decoded;
      } catch (e) {
           res.status(403).send(e);

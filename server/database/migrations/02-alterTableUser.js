@@ -3,7 +3,7 @@ exports.up = function (knex) {
           knex.schema.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'),
 
 
-          knex.schema.alterTable('Paitents', function (table) {
+          knex.schema.alterTable('Patients', function (table) {
                table.text('roomNo').alter();
           })
      ])

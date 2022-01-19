@@ -76,6 +76,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return Strings.enterEmail;
+                      } else if (!value.contains(Strings.atTheRate)) {
+                        return Strings.invalidEmail;
                       }
                       return null;
                     },
@@ -165,26 +167,28 @@ class _SignupScreenState extends State<SignupScreen> {
                     textInputAction: TextInputAction.done,
                   ),
                   SizedBox(height: 30.h),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return Strings.enterPhone;
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      phoneNumber = value!;
+                    },
+                    maxLength: 50,
+                    decoration: const InputDecoration(
+                      counterText: Strings.empty,
+                      labelText: Strings.phoneNumber,
+                      hintText: Strings.phoneNumber,
+                    ),
+                    keyboardType: TextInputType.phone,
+                    textInputAction: TextInputAction.done,
+                  ),
+                  SizedBox(height: 30.h),
                   isDoctor
-                      ? TextFormField(
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return Strings.enterPhone;
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            phoneNumber = value!;
-                          },
-                          maxLength: 50,
-                          decoration: const InputDecoration(
-                            counterText: Strings.empty,
-                            labelText: Strings.phoneNumber,
-                            hintText: Strings.phoneNumber,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.done,
-                        )
+                      ? Container()
                       : TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -262,16 +266,24 @@ class _SignupScreenState extends State<SignupScreen> {
                             name,
                             password,
                             dob,
+                            phoneNumber,
                             roomNo,
                           );
                         }
                         if (!hasError(context, response)) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MQTTView(),
-                            ),
-                          );
+                          if (isDoctor) {
+                            Navigator.pushReplacementNamed(
+                                context, Routes.patientSelect);
+                          } else {
+                            Navigator.pushReplacementNamed(
+                                context, Routes.patientHome);
+                          }
+                          /* Navigator.push( */
+                          /*   context, */
+                          /*   MaterialPageRoute( */
+                          /*     builder: (context) => MQTTView(), */
+                          /*   ), */
+                          /* ); */
                         }
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }

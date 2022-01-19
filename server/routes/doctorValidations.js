@@ -23,13 +23,14 @@ const doctorLogInValidation = data => {
 const doctorJwtValidation = data =>{
      const schema = joi.object({
           authorization : joi.required()
-     })
+     }).unknown(true);
      return schema.validate(data);
 }
 
 const doctorPatientsListValidation = data =>{
      const schema = joi.object({
-          patientsList : joi.string().required()
+          patientsList : joi.string().required(),
+          id : joi.string().required()
      })
      return schema.validate(data);
 }

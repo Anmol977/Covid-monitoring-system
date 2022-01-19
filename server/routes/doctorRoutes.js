@@ -7,7 +7,6 @@ const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = requi
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const utils = require('../utils');
 const patientStore = require('../stores/patientStore');
-const e = require('express');
 const doctorStore = require('../stores/doctorStore');
 
 router.post('/doctor/signUp', async (req, res) => {
@@ -15,12 +14,14 @@ router.post('/doctor/signUp', async (req, res) => {
      let user;
      if (error) {
           logger.error(error);
-          return res.status(400).send(error.details[0].message);
+          return res.status(400).send({
+               error:error.details[0].message,
+               message:utils.staticVars.GENERAL_ERROR
+          });
      } else {
           try {
                const { email, phoneNumber, fullName, password } = req.body;
                let userExists = await checkDoctorExists(email, phoneNumber);
-               console.log(userExists.rows[0].sumcount);
                if (userExists.rows[0].sumcount != 0) {
                     logger.info(`email ${email} or number ${phoneNumber} already exists, could not sign-up`);
                     return res
@@ -179,9 +180,23 @@ router.post('/assignPatients',async (req,res,next)=>{
                let token = req.headers.authorization;
                const payload = validateJwtToken(token,res,next);
                if( payload.scope === 'Doctor' ){
-                    const {patientsList} = req.body;
-                    let res = await doctorStore.insertPatientsList(patientsList);
-                    console.log(res);
+                    const {patientsList,id} = req.body;
+                    const response = await doctorStore.insertPatientsList(patientsList,id);
+                    if(response){
+                         res.status(200).send({
+                              error:'',
+                              message:utils.staticVars.LIST_UPDATED,
+                              data:null
+                         })
+                    }
+                    else{
+                         res.status(409).send({
+                              error:utils.staticVars.GENERAL_ERROR,
+                              message:utils.staticVars.LIST_ERROR,
+                              data:null
+
+                         })
+                    }
                }
           }
      }

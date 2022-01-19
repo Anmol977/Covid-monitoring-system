@@ -6,13 +6,17 @@ const { patientSignupValidation, patientLogInValidation } = require('./patientVa
 const { patientEmailExists, patientPhoneExists, create, getPatientDetails, checkPatientExists } = require('../stores/patientStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const utils = require('../utils');
+const { staticVars } = require('../utils');
 
 router.post('/patient/signUp', async (req, res) => {
      const { error } = patientSignupValidation(req.body)
      let user;
      if (error) {
           logger.error(error);
-          return res.status(400).send(error.details[0].message);
+          return res.status(400).send({
+               error:error.details[0].message,
+               message:utils.staticVars.GENERAL_ERROR
+          });
      } else {
           try {
                const { email, phoneNumber, dob, fullName, password, roomNo } = req.body;

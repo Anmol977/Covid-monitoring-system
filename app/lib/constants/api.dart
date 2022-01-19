@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/models/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +18,7 @@ class Api {
   static const String _doctorLogin = 'doctor/login/email';
   static const String _doctorSignup = 'doctor/signUp';
 
-  static const String _patientList = 'patient/list';
+  static const String _patientList = 'patients/list';
 
   static const String error = 'error';
   static const String data = 'data';
@@ -112,14 +113,18 @@ class Api {
     return json.decode(response.body);
   }
 
-  static Future fetchPatientList() async {
+  static Future<List<Patient>> fetchPatientList() async {
     http.Response response = await http.get(
       Uri.parse(_host + _patientList),
       headers: {
         Strings.authorization: Token.bearerToken,
       },
     );
-    debugPrint(response.body);
-    return json.decode(response.body);
+    Map<String, dynamic> result = json.decode(response.body);
+    List<Patient> patients = [];
+    result[Parameters.data].forEach((patientData) {
+      patients.add(Patient.fromMap(patientData));
+    });
+    return patients;
   }
 }

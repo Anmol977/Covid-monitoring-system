@@ -49,4 +49,6 @@ class Strings {
   static const String zero = '0';
   static const String assignedDoctor = 'Assigned Doctor: ';
   static const String status = 'STATUS: ';
+  static const String roomNo = 'Room No. ';
+  static const String noPatient = 'No Patients';
 }

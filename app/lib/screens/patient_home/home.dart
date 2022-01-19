@@ -24,7 +24,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           tooltip: Strings.notifyDoctor,
           backgroundColor: AppColors.primaryColor,
           onPressed: () {
-            debugPrint("Doctor evolved into The FLASH!!!");
+            print("Doctor evolved into The FLASH!!!");
           },
           child: Icon(
             Icons.notifications_on_outlined,
@@ -40,34 +40,16 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           child: FutureBuilder(
             future: MQTTBroker.configureMQTT(),
             builder: (context, snapshot) {
-              return SizedBox(
-                height: 1.sh,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 0.5.sh,
-                        child: GridView.count(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 0.05.sw,
-                          crossAxisSpacing: 0.05.sw,
-                          children: [
-                            _buildPatientInfo(
-                                Strings.temperature, Strings.zero),
-                            _buildPatientInfo(Strings.spo2level, Strings.zero),
-                            _buildPatientInfo(Strings.pulseRate, Strings.zero),
-                            _buildPatientInfo(Strings.pulseRate, Strings.zero),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 0.05.sw),
-                      const Text(Strings.status + "Beauty"),
-                      SizedBox(height: 0.05.sw),
-                      const Text(Strings.assignedDoctor + "Dr. Sweet Lark"),
-                    ],
-                  ),
-                ),
+              return GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0.05.sw,
+                crossAxisSpacing: 0.05.sw,
+                children: [
+                  _buildPatientInfo(Strings.temperature, Strings.zero),
+                  _buildPatientInfo(Strings.spo2level, Strings.zero),
+                  _buildPatientInfo(Strings.pulseRate, Strings.zero),
+                  _buildPatientInfo(Strings.pulseRate, Strings.zero),
+                ],
               );
             },
           ),

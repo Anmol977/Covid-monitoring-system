@@ -28,9 +28,10 @@ const doctorJwtValidation = data =>{
 }
 
 const doctorPatientsListValidation = data =>{
-     const schea = joi.object({
-          patientsList : joi.string()
+     const schema = joi.object({
+          patientsList : joi.string().required()
      })
+     return schema.validate(data);
 }
 
-module.exports = { doctorSignupValidation, doctorLogInValidation, doctorJwtValidation };
+module.exports = { doctorSignupValidation, doctorLogInValidation, doctorJwtValidation, doctorPatientsListValidation };

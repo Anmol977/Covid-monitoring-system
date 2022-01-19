@@ -7,7 +7,6 @@ const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = requi
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const utils = require('../utils');
 const patientStore = require('../stores/patientStore');
-const { createGlobalSettings } = require('@angular/cli/utilities/config');
 const e = require('express');
 const doctorStore = require('../stores/doctorStore');
 
@@ -163,7 +162,7 @@ router.get('/patients/list', async (req, res, next) => {
 })
 
 router.post('/assignPatients',async (req,res,next)=>{
-     const {error} = validateJwtToken(req.headers);
+     const {error} = doctorJwtValidation(req.headers);
      if(error){
           logger.error(error);
           res.status(401).send({

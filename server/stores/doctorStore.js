@@ -27,5 +27,8 @@ module.exports = {
      },
      getDoctorDetails: (id) => {
           return db('Doctors').select('id', 'email', 'phoneNumber', 'fullName', 'patientsAssigned').where({ id }).first();
+     },
+     insertPatientsList: (patients) =>{
+          return db.insert('Doctors').insert({patientsAssigned : patients});
      }
 }

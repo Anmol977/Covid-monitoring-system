@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const logger = require('../logger');
-const { doctorSignupValidation, doctorLogInValidation } = require('./doctorValidations');
+const { doctorSignupValidation, doctorLogInValidation, doctorPatientsListValidation, doctorJwtValidation } = require('./doctorValidations');
 const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = require('../stores/doctorStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const utils = require('../utils');
 const patientStore = require('../stores/patientStore');
 const { createGlobalSettings } = require('@angular/cli/utilities/config');
+const e = require('express');
+const doctorStore = require('../stores/doctorStore');
 
 router.post('/doctor/signUp', async (req, res) => {
      const { error } = doctorSignupValidation(req.body)
@@ -124,6 +126,14 @@ router.get('/doctor/details', async (req, res, next) => {
 })
 
 router.get('/patients/list', async (req, res, next) => {
+     const {error} = doctorJwtValidation(req.headers);
+     if(error){
+          logger.error(error);
+          res.status(401).send({
+               error:error.details[0],
+          })
+     }
+     else{
      try {
           const token = req.headers.authorization;
           const payload = validateJwtToken(token, res, next);
@@ -149,6 +159,34 @@ router.get('/patients/list', async (req, res, next) => {
           logger.error(e);
           res.status(500).send({ error: e });
      }
+}
+})
+
+router.post('/assignPatients',async (req,res,next)=>{
+     const {error} = validateJwtToken(req.headers);
+     if(error){
+          logger.error(error);
+          res.status(401).send({
+               error:error.details[0],
+          })
+     } else {
+          const {error} = doctorPatientsListValidation(req.body);
+          if(error){
+               logger.error(error);
+               res.status(400).send({
+                    error:error.details[0]
+               })
+          } else {
+               let token = req.headers.authorization;
+               const payload = validateJwtToken(token,res,next);
+               if( payload.scope === 'Doctor' ){
+                    const {patientsList} = req.body;
+                    let res = await doctorStore.insertPatientsList(patientsList);
+                    console.log(res);
+               }
+          }
+     }
+
 })
 
 module.exports = router;

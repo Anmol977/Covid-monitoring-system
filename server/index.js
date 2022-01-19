@@ -18,7 +18,7 @@ app.use(bodyParser.json());
       logger.info('database migrations complete...');
     });
   } catch (e) {
-    console.log(e);
+    logger.error(e);
   }
 })();
 

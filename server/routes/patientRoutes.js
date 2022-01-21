@@ -123,6 +123,7 @@ router.post('/patient/login/email', async (req, res, next) => {
                                    error: '',
                                    message: 'Logged In successfully',
                                    data: userDetails,
+                                   scope: 'Patient'
                               });
                     } else {
                          return res

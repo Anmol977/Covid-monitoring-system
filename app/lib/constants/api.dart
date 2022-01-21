@@ -17,8 +17,10 @@ class Api {
 
   static const String _doctorLogin = 'doctor/login/email';
   static const String _doctorSignup = 'doctor/signUp';
+  static const String _getPatientVitals = 'doctor/getPatientVitals';
 
   static const String _patientList = 'patients/list';
+  static const String _assignPatients = 'assignPatients';
 
   static const String error = 'error';
   static const String data = 'data';
@@ -48,6 +50,16 @@ class Api {
         response.headers[Parameters.cookie]!.split(";")[0].split("=")[1],
       );
     }
+    return json.decode(response.body);
+  }
+
+  static Future<Map<String, dynamic>> patientAutoLogin() async {
+    http.Response response = await http.post(
+      Uri.parse(_host + _patientLogin),
+      headers: {
+        Strings.authorization: Token.bearerToken,
+      },
+    );
     return json.decode(response.body);
   }
 
@@ -94,6 +106,16 @@ class Api {
     return json.decode(response.body);
   }
 
+  static Future<Map<String, dynamic>> doctorAutoLogin() async {
+    http.Response response = await http.post(
+      Uri.parse(_host + _doctorLogin),
+      headers: {
+        Strings.authorization: Token.bearerToken,
+      },
+    );
+    return json.decode(response.body);
+  }
+
   static Future<Map<String, dynamic>> doctorLogin(
     String email,
     String password,
@@ -126,5 +148,29 @@ class Api {
       patients.add(Patient.fromMap(patientData));
     });
     return patients;
+  }
+
+  static Future<void> getPatientsVitals() async {
+    http.Response response = await http.get(
+      Uri.parse(_host + _getPatientVitals),
+      headers: {
+        Strings.authorization: Token.bearerToken,
+      },
+    );
+  }
+
+  static Future<Map<String, dynamic>> assignPatients(String patients) async {
+    http.Response response = await http.post(
+      Uri.parse(_host + _assignPatients),
+      headers: {
+        Strings.authorization: Token.bearerToken,
+      },
+      body: {
+        Parameters.id: '9407351e-1e38-4f6d-90e5-f9d763c252c5',
+        Parameters.patientsList: patients,
+      },
+    );
+    debugPrint(response.body);
+    return json.decode(response.body);
   }
 }

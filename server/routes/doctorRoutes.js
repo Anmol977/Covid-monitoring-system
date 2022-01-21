@@ -256,8 +256,9 @@ router.get('/doctor/getPatientVitals', async (req, res, next) => {
           const payload = validateJwtToken(token, res, next);
           if (payload.scope === 'Doctor') {
                let patientsList = await getDoctorAssignedPatients(payload.id);
-               for (let patient in patientsList)
-                    console.log(patient);
+                    console.log(JSON.parse(patientsList.patientsAssigned)[1]);
+			let patients = JSON.parse(patientsList.patientsAssigned);
+			  patients.map((patient)=>{console.log(patient);});
           }
      }
 })

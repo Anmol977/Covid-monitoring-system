@@ -5,7 +5,6 @@ import 'package:covmon/constants/utils.dart';
 import 'package:covmon/mqtt/mqttView.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -270,6 +269,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             roomNo,
                           );
                         }
+                        debugPrint(response.toString());
                         if (!hasError(context, response)) {
                           if (isDoctor) {
                             Navigator.pushReplacementNamed(

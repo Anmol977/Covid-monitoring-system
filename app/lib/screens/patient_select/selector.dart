@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/models/patient.dart';
@@ -29,14 +31,33 @@ class _PatientSelectState extends State<PatientSelect> {
               return const CircularProgressIndicator();
             }
             patients = snapshot.data ?? [];
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0.02.sw),
-              child: patients.isEmpty
-                  ? const Text(Strings.noPatient)
-                  : ListView.builder(
-                      itemCount: patients.length,
-                      itemBuilder: (context, i) => PatientListItem(patients[i]),
-                    ),
+            return Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.02.sw),
+                  child: patients.isEmpty
+                      ? const Text(Strings.noPatient)
+                      : ListView.builder(
+                          itemCount: patients.length,
+                          itemBuilder: (context, i) =>
+                              PatientListItem(patients[i]),
+                        ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    child: const Text(Strings.cont),
+                    onPressed: () async {
+                      List<String> newPats = [];
+                      for (Patient patient in patients) {
+                        newPats.add(patient.id);
+                      }
+                      await Api.assignPatients(json.encode(newPats));
+                      await Api.getPatientsVitals();
+                    },
+                  ),
+                ),
+              ],
             );
           },
         ),

@@ -38,7 +38,10 @@ class Strings {
   static const String passwordMismatch = 'Passwords don\'t match';
 
   static const String token = 'token';
+  static const String scope = 'scope';
   static const String authorization = 'authorization';
+  static const String patientScope = 'Patient';
+  static const String doctorScope = 'Doctor';
 
   static const String home = 'Home';
   static const String patientSelect = 'Select Patents';

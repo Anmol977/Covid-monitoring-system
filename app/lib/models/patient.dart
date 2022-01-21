@@ -23,4 +23,10 @@ class Patient {
         fullName: data[Parameters.fullName] ?? Strings.empty,
         roomNo: data[Parameters.roomNo] ?? Strings.empty,
       );
+
+  Map<String, dynamic> toMap() => {
+        Parameters.id: id,
+        Parameters.fullName: fullName,
+        Parameters.roomNo: roomNo,
+      };
 }

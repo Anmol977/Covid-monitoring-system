@@ -1,5 +1,7 @@
 import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/mqtt.dart';
+import 'package:covmon/constants/preferences.dart';
+import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +21,16 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
         appBar: AppBar(
           title: const Text(Strings.home),
           automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              color: AppColors.grayWeb,
+              onPressed: () {
+                Token.reset();
+                Navigator.pushReplacementNamed(context, Routes.select);
+              },
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           tooltip: Strings.notifyDoctor,

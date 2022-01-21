@@ -6,7 +6,7 @@ const utils = require('../utils');
 const doctorStore = require('../stores/doctorStore');
 const patientStore = require('../stores/patientStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
-const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = require('../stores/doctorStore');
+const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists, getDoctorAssignedPatients } = require('../stores/doctorStore');
 const { doctorSignupValidation, doctorLogInValidation, doctorPatientsListValidation, doctorJwtValidation } = require('./doctorValidations');
 
 router.post('/doctor/signUp', async (req, res, next) => {
@@ -37,7 +37,7 @@ router.post('/doctor/signUp', async (req, res, next) => {
                     let userId = await create({ email, phoneNumber, fullName, password });
                     user = await getDoctorDetails(userId[0]);
                     logger.info(`user created successfully, id : ${user.id}`);
-                    let token = generateUserToken({ id: user.id, email: user.email, scope: 'Doctor' });
+                    let token = generateUserToken({ id: user.id, email: user.email, scope: utils.staticVars.DOCTOR });
                     res.cookie('authorization', token, { httpOnly: true });
                     return res
                          .status(200)
@@ -46,7 +46,7 @@ router.post('/doctor/signUp', async (req, res, next) => {
                                    error: '',
                                    message: 'user created successfully',
                                    data: user,
-                                   scope: 'Doctor'
+                                   scope: utils.staticVars.DOCTOR
                               }
                          )
                }
@@ -117,7 +117,7 @@ router.post('/doctor/login/email', async (req, res, next) => {
                     let userDetails = await getDoctorDetails(emailExists.id);
                     let passwordMatch = bcrypt.compareSync(password, emailExists.password);
                     if (passwordMatch) {
-                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email, scope: 'Doctor' });
+                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email, scope: utils.staticVars.DOCTOR });
                          res.cookie('authorization', token, { httpOnly: true });
                          return res
                               .status(200)
@@ -125,7 +125,7 @@ router.post('/doctor/login/email', async (req, res, next) => {
                                    error: '',
                                    message: 'Logged In successfully',
                                    data: userDetails,
-                                   scope: 'Doctor'
+                                   scope: utils.staticVars.DOCTOR
                               });
                     } else {
                          return res
@@ -242,6 +242,24 @@ router.post('/assignPatients', async (req, res, next) => {
           }
      }
 
+})
+
+router.get('/doctor/getPatientVitals', async (req, res, next) => {
+     const { error } = doctorJwtValidation(req.headers);
+     if (error) {
+          logger.error(error);
+          res.status(401).send({
+               error: error.details[0],
+          })
+     } else {
+          let token = req.headers.authorization;
+          const payload = validateJwtToken(token, res, next);
+          if (payload.scope === 'Doctor') {
+               let patientsList = await getDoctorAssignedPatients(payload.id);
+               for (let patient in patientsList)
+                    console.log(patient);
+          }
+     }
 })
 
 module.exports = router;

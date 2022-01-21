@@ -36,7 +36,7 @@ router.post('/patient/signUp', async (req, res, next) => {
                let userId = await create({ email, phoneNumber, dob, fullName, password, roomNo });
                user = await getPatientDetails(userId[0]);
                logger.info(`user created successfully, id : ${user.id}`);
-               let token = generateUserToken({ id: user.id, email: user.email, scope: 'Patient' });
+               let token = generateUserToken({ id: user.id, email: user.email, scope: utils.staticVars.PATIENT });
                res.cookie('authorization', token, { httpOnly: true });
                return res
                     .status(200)
@@ -45,7 +45,7 @@ router.post('/patient/signUp', async (req, res, next) => {
                               error: '',
                               message: 'user created successfully',
                               data: user,
-                              scope: 'Patient'
+                              scope: utils.staticVars.PATIENT
                          }
                     )
           } catch (e) {
@@ -115,7 +115,7 @@ router.post('/patient/login/email', async (req, res, next) => {
                     let userDetails = await getPatientDetails(emailExists.id);
                     let passwordMatch = bcrypt.compareSync(password, emailExists.password);
                     if (passwordMatch) {
-                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email, scope: 'Patient' });
+                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email, scope: utils.staticVars.PATIENT });
                          res.cookie('authorization', token, { httpOnly: true });
                          return res
                               .status(200)
@@ -123,7 +123,7 @@ router.post('/patient/login/email', async (req, res, next) => {
                                    error: '',
                                    message: 'Logged In successfully',
                                    data: userDetails,
-                                   scope: 'Patient'
+                                   scope: utils.staticVars.PATIENT
                               });
                     } else {
                          return res

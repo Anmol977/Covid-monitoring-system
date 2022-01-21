@@ -252,13 +252,27 @@ router.get('/doctor/getPatientVitals', async (req, res, next) => {
                error: error.details[0],
           })
      } else {
-          let token = req.headers.authorization;
-          const payload = validateJwtToken(token, res, next);
-          if (payload.scope === 'Doctor') {
-               let patientsList = await getDoctorAssignedPatients(payload.id);
-                    console.log(JSON.parse(patientsList.patientsAssigned)[1]);
-			let patients = JSON.parse(patientsList.patientsAssigned);
-			  patients.map((patient)=>{console.log(patient);});
+          try {
+               let token = req.headers.authorization;
+               const payload = validateJwtToken(token, res, next);
+               if (payload.scope === 'Doctor') {
+                    let patientsList = await getDoctorAssignedPatients(payload.id);
+                    let patients = JSON.parse(patientsList.patientsAssigned);
+                    let patientVitals;
+                    let patientsVitalsList = [];
+                    for await (let patient of patients) {
+                         patientVitals = await patientStore.getPatientVitals(patient);
+                         patientsVitalsList.push(patientVitals);
+                    }
+                    res.status(200).send({
+                         error: '',
+                         message: 'vitals fetched successfully',
+                         data: patientsVitalsList
+                    })
+               }
+          } catch (e) {
+               logger.error(e);
+               res.status(500).send({ error: e });
           }
      }
 })

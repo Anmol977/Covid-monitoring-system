@@ -5,7 +5,7 @@ const doctorSignupValidation = data => {
           fullName: joi.string().required(),
           email: joi.string().email().required(),
           phoneNumber: joi.string().required().max(10).min(10),
-          password: joi.string().required(),
+          password: joi.string().required().min(8),
      })
      return schema.validate(data);
 }
@@ -20,17 +20,17 @@ const doctorLogInValidation = data => {
      return schema.validate(data);
 }
 
-const doctorJwtValidation = data =>{
+const doctorJwtValidation = data => {
      const schema = joi.object({
-          authorization : joi.required()
+          authorization: joi.required()
      }).unknown(true);
      return schema.validate(data);
 }
 
-const doctorPatientsListValidation = data =>{
+const doctorPatientsListValidation = data => {
      const schema = joi.object({
-          patientsList : joi.string().required(),
-          id : joi.string().required()
+          patientsList: joi.string().required(),
+          id: joi.string().required()
      })
      return schema.validate(data);
 }

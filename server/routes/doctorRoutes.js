@@ -9,7 +9,7 @@ const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists } = require('../stores/doctorStore');
 const { doctorSignupValidation, doctorLogInValidation, doctorPatientsListValidation, doctorJwtValidation } = require('./doctorValidations');
 
-router.post('/doctor/signUp', async (req, res) => {
+router.post('/doctor/signUp', async (req, res, next) => {
      const { error } = doctorSignupValidation(req.body)
      let user;
      if (error) {

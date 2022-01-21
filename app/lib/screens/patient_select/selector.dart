@@ -45,16 +45,19 @@ class _PatientSelectState extends State<PatientSelect> {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: TextButton(
-                    child: const Text(Strings.cont),
-                    onPressed: () async {
-                      List<String> newPats = [];
-                      for (Patient patient in patients) {
-                        newPats.add(patient.id);
-                      }
-                      await Api.assignPatients(json.encode(newPats));
-                      await Api.getPatientsVitals();
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      child: const Text(Strings.cont),
+                      onPressed: () async {
+                        List<String> newPats = [];
+                        for (Patient patient in patients) {
+                          newPats.add(patient.id);
+                        }
+                        await Api.assignPatients(json.encode(newPats));
+                        await Api.getPatientsVitals();
+                      },
+                    ),
                   ),
                 ),
               ],

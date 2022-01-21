@@ -1,3 +1,4 @@
+import 'package:covmon/constants/strings.dart';
 import 'package:flutter/material.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
@@ -12,6 +13,10 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text(Strings.home),
+          automaticallyImplyLeading: false,
+        ),
         body: Text("Docs"),
       ),
     );

@@ -33,9 +33,11 @@ showSuccessSnackBar(BuildContext context, String successMessage) {
         children: [
           const Icon(Icons.error),
           SizedBox(width: 10.w),
-          Text(
-            successMessage,
-            style: const TextStyle(color: AppColors.secondaryColor),
+          Flexible(
+            child: Text(
+              successMessage,
+              style: const TextStyle(color: AppColors.secondaryColor),
+            ),
           ),
         ],
       ),
@@ -51,9 +53,11 @@ showErrorSnackBar(BuildContext context, String errorMessage) {
         children: [
           const Icon(Icons.error),
           SizedBox(width: 10.w),
-          Text(
-            errorMessage,
-            style: const TextStyle(color: AppColors.secondaryColor),
+          Flexible(
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: AppColors.secondaryColor),
+            ),
           ),
         ],
       ),

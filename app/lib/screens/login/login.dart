@@ -37,6 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return Strings.enterEmail;
+                      } else if (!value.contains(Strings.atTheRate)) {
+                        return Strings.invalidEmail;
                       }
                       return null;
                     },
@@ -104,11 +106,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             password,
                           );
                         }
-                        // Temporary for mqtt testing
+                        debugPrint(response.toString());
                         if (!hasError(context, response)) {
                           if (isDoctor) {
+                            // Doctor Home later
                             Navigator.pushReplacementNamed(
-                                context, Routes.doctorHome);
+                                context, Routes.patientSelect);
                           } else {
                             Navigator.pushReplacementNamed(
                                 context, Routes.patientHome);

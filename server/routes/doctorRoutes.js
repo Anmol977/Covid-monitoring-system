@@ -45,7 +45,8 @@ router.post('/doctor/signUp', async (req, res, next) => {
                               {
                                    error: '',
                                    message: 'user created successfully',
-                                   data: user
+                                   data: user,
+                                   scope: 'Doctor'
                               }
                          )
                }
@@ -75,7 +76,6 @@ router.post('/doctor/login/email', async (req, res, next) => {
                                         error: '',
                                         message: 'Logged In successfully',
                                         data: userDetails,
-                                        scope: payload.scope
                                    });
                          } else {
                               return res

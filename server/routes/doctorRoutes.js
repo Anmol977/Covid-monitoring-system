@@ -37,7 +37,7 @@ router.post('/doctor/signUp', async (req, res) => {
                     let userId = await create({ email, phoneNumber, fullName, password });
                     user = await getDoctorDetails(userId[0]);
                     logger.info(`user created successfully, id : ${user.id}`);
-                    let token = generateUserToken({ id: user.id, email: user.email });
+                    let token = generateUserToken({ id: user.id, email: user.email, scope: 'Doctor' });
                     res.cookie('authorization', token, { httpOnly: true });
                     return res
                          .status(200)
@@ -56,7 +56,46 @@ router.post('/doctor/signUp', async (req, res) => {
      }
 })
 
-router.post('/doctor/login/email', async (req, res) => {
+router.post('/doctor/login/email', async (req, res, next) => {
+     try {
+          if (req.headers.authorization) {
+               const { error } = doctorJwtValidation(req.headers);
+               if (error) {
+                    logger.error(error);
+                    return res.status(400).send({ error: error.details[0].message });
+               } else {
+                    const token = req.headers.authorization;
+                    const payload = validateJwtToken(token, res, next);
+                    if (payload.scope === 'Doctor') {
+                         let userDetails = await getDoctorDetails(payload.id);
+                         if (userDetails) {
+                              return res
+                                   .status(200)
+                                   .send({
+                                        error: '',
+                                        message: 'Logged In successfully',
+                                        data: userDetails,
+                                   });
+                         } else {
+                              return res
+                                   .status(400)
+                                   .send({
+                                        error: utils.staticVars.GENERAL_ERROR,
+                                        data: null
+                                   });
+                         }
+                    }
+               }
+          }
+     } catch (e) {
+          logger.error(e);
+          return res
+               .status(500)
+               .send({
+                    error: e,
+                    data: null
+               });
+     }
      const { error } = doctorLogInValidation(req.body);
      if (error) {
           logger.error(error);

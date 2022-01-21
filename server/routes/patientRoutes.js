@@ -36,7 +36,7 @@ router.post('/patient/signUp', async (req, res) => {
                let userId = await create({ email, phoneNumber, dob, fullName, password, roomNo });
                user = await getPatientDetails(userId[0]);
                logger.info(`user created successfully, id : ${user.id}`);
-               let token = generateUserToken({ id: user.id, email: user.email });
+               let token = generateUserToken({ id: user.id, email: user.email, scope: 'Patient' });
                res.cookie('authorization', token, { httpOnly: true });
                return res
                     .status(200)
@@ -75,7 +75,7 @@ router.post('/patient/login/email', async (req, res) => {
                     let userDetails = await getPatientDetails(emailExists.id);
                     let passwordMatch = bcrypt.compareSync(password, emailExists.password);
                     if (passwordMatch) {
-                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email });
+                         let token = generateUserToken({ id: userDetails.id, email: userDetails.email, scope: 'Patient' });
                          res.cookie('authorization', token, { httpOnly: true });
                          return res
                               .status(200)

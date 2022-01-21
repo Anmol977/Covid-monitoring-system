@@ -75,6 +75,7 @@ router.post('/doctor/login/email', async (req, res, next) => {
                                         error: '',
                                         message: 'Logged In successfully',
                                         data: userDetails,
+                                        scope: payload.scope
                                    });
                          } else {
                               return res

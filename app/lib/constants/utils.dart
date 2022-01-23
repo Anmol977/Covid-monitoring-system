@@ -25,6 +25,10 @@ bool hasError(
   }
 }
 
+Color statusColor(String status) {
+  return AppColors.tertiaryColor;
+}
+
 showSuccessSnackBar(BuildContext context, String successMessage) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

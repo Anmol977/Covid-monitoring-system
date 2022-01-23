@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'parameters.dart';
 
 class Api {
-  static const _ipaddress = '192.168.0.103';
+  static const _ipaddress = '192.168.29.24';
   static const String _host = 'http://' + _ipaddress + ':5000/';
 
   static const String _patientLogin = 'patient/login/email';
@@ -150,13 +150,14 @@ class Api {
     return patients;
   }
 
-  static Future<void> getPatientsVitals() async {
+  static Future<Map<String, dynamic>> getPatientsVitals() async {
     http.Response response = await http.get(
       Uri.parse(_host + _getPatientVitals),
       headers: {
         Strings.authorization: Token.bearerToken,
       },
     );
+    return json.decode(response.body);
   }
 
   static Future<Map<String, dynamic>> assignPatients(String patients) async {
@@ -166,6 +167,7 @@ class Api {
         Strings.authorization: Token.bearerToken,
       },
       body: {
+        //Da Faq
         Parameters.id: '9407351e-1e38-4f6d-90e5-f9d763c252c5',
         Parameters.patientsList: patients,
       },

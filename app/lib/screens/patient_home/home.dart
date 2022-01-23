@@ -60,7 +60,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                   _buildPatientInfo(Strings.temperature, Strings.zero),
                   _buildPatientInfo(Strings.spo2level, Strings.zero),
                   _buildPatientInfo(Strings.pulseRate, Strings.zero),
-                  _buildPatientInfo(Strings.pulseRate, Strings.zero),
+                  _buildPatientInfo(Strings.heartRate, Strings.zero),
                 ],
               );
             },

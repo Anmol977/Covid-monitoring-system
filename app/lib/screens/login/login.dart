@@ -4,7 +4,6 @@ import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
-import 'package:covmon/mqtt/mqttView.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -112,19 +111,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         Token.setScope(response[Parameters.scope]);
                         if (!hasError(context, response)) {
                           if (isDoctor) {
-                            // Doctor Home later
                             Navigator.pushReplacementNamed(
-                                context, Routes.patientSelect);
+                                context, Routes.doctorHome);
                           } else {
                             Navigator.pushReplacementNamed(
                                 context, Routes.patientHome);
                           }
-                          /* Navigator.push( */
-                          /*   context, */
-                          /*   MaterialPageRoute( */
-                          /*     builder: (context) => MQTTView(), */
-                          /*   ), */
-                          /* ); */
                         }
                       }
                     },

@@ -1,11 +1,16 @@
 import 'dart:convert';
 
 import 'package:covmon/constants/api.dart';
+import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/constants/utils.dart';
 import 'package:covmon/models/patient.dart';
-import 'package:covmon/screens/selector/components/patient_list_item.dart';
+import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import 'components/patient_list_item.dart';
 
 class PatientSelect extends StatefulWidget {
   const PatientSelect({Key? key}) : super(key: key);
@@ -30,7 +35,9 @@ class _PatientSelectState extends State<PatientSelect> {
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();
             }
-            patients = snapshot.data ?? [];
+            if (patients.isEmpty) {
+              patients = snapshot.data ?? [];
+            }
             return Stack(
               children: [
                 Padding(
@@ -50,12 +57,19 @@ class _PatientSelectState extends State<PatientSelect> {
                     child: TextButton(
                       child: const Text(Strings.cont),
                       onPressed: () async {
-                        List<String> newPats = [];
-                        for (Patient patient in patients) {
-                          newPats.add(patient.id);
+                        List<String> selectedPatientsIds = [];
+                        for (Patient patient
+                            in Provider.of<Patients>(context, listen: false)
+                                .patients) {
+                          selectedPatientsIds.add(patient.id);
                         }
-                        await Api.assignPatients(json.encode(newPats));
-                        await Api.getPatientsVitals();
+                        Map<String, dynamic> response =
+                            await Api.assignPatients(
+                                json.encode(selectedPatientsIds));
+                        if (!hasError(context, response)) {
+                          Navigator.pushReplacementNamed(
+                              context, Routes.doctorHome);
+                        }
                       },
                     ),
                   ),

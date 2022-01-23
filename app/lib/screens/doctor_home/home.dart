@@ -2,7 +2,13 @@ import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/models/patient.dart';
+import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import 'components/patient_vitals_list.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
   const DoctorHomeScreen({Key? key}) : super(key: key);
@@ -12,6 +18,7 @@ class DoctorHomeScreen extends StatefulWidget {
 }
 
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
+  List<Patient> patients = [];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,7 +37,26 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             ),
           ],
         ),
-        body: Text("Docs"),
+        body: FutureBuilder<List<Patient>>(
+          future: Provider.of<Patients>(context).getPatientsVitals(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            }
+            if (patients.isEmpty) {
+              patients = snapshot.data ?? [];
+            }
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0.02.sw),
+              child: patients.isEmpty
+                  ? const Text(Strings.noPatient)
+                  : ListView.builder(
+                      itemCount: patients.length,
+                      itemBuilder: (context, i) => PatientVitals(patients[i]),
+                    ),
+            );
+          },
+        ),
       ),
     );
   }

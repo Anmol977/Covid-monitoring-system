@@ -9,6 +9,7 @@ import 'constants/routes.dart';
 import 'constants/strings.dart';
 import 'constants/theme.dart';
 import 'mqtt/MQTTAppState.dart';
+import 'provider/patient.dart';
 import 'screens/doctor_home/home.dart';
 import 'screens/patient_home/home.dart';
 import 'screens/selector/selector.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => MQTTAppState(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Patients(),
         ),
       ],
       child: ScreenUtilInit(

@@ -1,6 +1,7 @@
 import 'package:covmon/screens/doctor_home/home.dart';
 import 'package:covmon/screens/login/login.dart';
 import 'package:covmon/screens/patient_home/home.dart';
+import 'package:covmon/screens/patient_select/selector.dart';
 import 'package:covmon/screens/selector/selector.dart';
 import 'package:covmon/screens/signup/signup.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class Routes {
   static const String signup = '/signup';
   static const String patientHome = '/patient_home';
   static const String doctorHome = '/doctor_home';
+  static const String patientSelect = '/patient_select';
 }
 
 final Map<String, WidgetBuilder> routes = {
@@ -19,4 +21,5 @@ final Map<String, WidgetBuilder> routes = {
   Routes.signup: (context) => const SignupScreen(),
   Routes.patientHome: (context) => const PatientHomeScreen(),
   Routes.doctorHome: (context) => const DoctorHomeScreen(),
+  Routes.patientSelect: (context) => const PatientSelect(),
 };

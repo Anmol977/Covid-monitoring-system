@@ -1,4 +1,6 @@
 import 'package:covmon/constants/api.dart';
+import 'package:covmon/constants/parameters.dart';
+import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
@@ -37,6 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return Strings.enterEmail;
+                      } else if (!value.contains(Strings.atTheRate)) {
+                        return Strings.invalidEmail;
                       }
                       return null;
                     },
@@ -104,11 +108,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             password,
                           );
                         }
-                        // Temporary for mqtt testing
+                        debugPrint(response.toString());
+                        Token.setScope(response[Parameters.scope]);
                         if (!hasError(context, response)) {
                           if (isDoctor) {
+                            // Doctor Home later
                             Navigator.pushReplacementNamed(
-                                context, Routes.doctorHome);
+                                context, Routes.patientSelect);
                           } else {
                             Navigator.pushReplacementNamed(
                                 context, Routes.patientHome);

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 
+import 'constants/api.dart';
+import 'constants/preferences.dart';
 import 'constants/routes.dart';
 import 'constants/strings.dart';
 import 'constants/theme.dart';
 import 'mqtt/MQTTAppState.dart';
+import 'screens/doctor_home/home.dart';
+import 'screens/patient_home/home.dart';
+import 'screens/selector/selector.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +35,30 @@ class MyApp extends StatelessWidget {
           title: Strings.appTitle,
           theme: theme(),
           routes: routes,
-          initialRoute: Routes.select,
+          home: AnimatedSplashScreen.withScreenFunction(
+            splash: 'assets/launch_screen.png',
+            screenFunction: () async {
+              Map<String, dynamic> response;
+              if (await Token.isTokenAlreadySet()) {
+                String scope = await Token.getScope();
+                if (scope == Strings.patientScope) {
+                  response = await Api.patientAutoLogin();
+                  if (response[Api.error].isEmpty) {
+                    debugPrint(response.toString());
+                    return const PatientHomeScreen();
+                  }
+                }
+                if (scope == Strings.doctorScope) {
+                  response = await Api.doctorAutoLogin();
+                  if (response[Api.error].isEmpty) {
+                    debugPrint(response.toString());
+                    return const DoctorHomeScreen();
+                  }
+                }
+              }
+              return const SelectorScreen();
+            },
+          ),
         ),
       ),
     );

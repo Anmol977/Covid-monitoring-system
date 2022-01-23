@@ -5,7 +5,7 @@ const patientSignupValidation = data => {
           fullName: joi.string().required(),
           email: joi.string().email().required(),
           phoneNumber: joi.string().required().max(10).min(10),
-          password: joi.string().required(),
+          password: joi.string().required().min(8),
           dob: joi.string().required(),
           roomNo: joi.string()
      })
@@ -22,4 +22,11 @@ const patientLogInValidation = data => {
      return schema.validate(data);
 }
 
-module.exports = { patientSignupValidation, patientLogInValidation };
+const patientJwtValidation = data => {
+     const schema = joi.object({
+          authorization: joi.required()
+     }).unknown(true);
+     return schema.validate(data);
+}
+
+module.exports = { patientSignupValidation, patientLogInValidation, patientJwtValidation };

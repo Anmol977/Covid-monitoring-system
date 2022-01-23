@@ -1,8 +1,8 @@
 class Strings {
-  static const String appTitle = "CovMon";
-  static const String fontFamily = "RobotoSlab";
+  static const String appTitle = 'CovMon';
+  static const String fontFamily = 'RobotoSlab';
 
-  static const String empty = "";
+  static const String empty = '';
 
   static const String name = 'Name';
   static const String fullName = 'Full Name';
@@ -32,15 +32,26 @@ class Strings {
   static const String enterRoom = 'Please enter your Room Number';
   static const String enterDob = 'Please enter your Date of Birth';
   static const String enterEmail = 'Please enter your e-mail';
+  static const String invalidEmail = 'Please enter a valid e-mail';
+  static const String atTheRate = '@';
   static const String enterPassword = 'Please enter your password';
   static const String passwordMismatch = 'Passwords don\'t match';
 
   static const String token = 'token';
+  static const String scope = 'scope';
+  static const String authorization = 'authorization';
+  static const String patientScope = 'Patient';
+  static const String doctorScope = 'Doctor';
 
   static const String home = 'Home';
+  static const String patientSelect = 'Select Patents';
   static const String temperature = 'Temperature';
   static const String spo2level = 'SpO2 Level';
   static const String pulseRate = 'Pulse Rate';
   static const String notifyDoctor = 'Notify Doctor';
   static const String zero = '0';
+  static const String assignedDoctor = 'Assigned Doctor: ';
+  static const String status = 'STATUS: ';
+  static const String roomNo = 'Room No. ';
+  static const String noPatient = 'No Patients';
 }

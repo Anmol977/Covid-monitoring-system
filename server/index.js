@@ -1,11 +1,11 @@
 require('dotenv').config()
 const express = require('express');
 const db = require('./db');
-const mqtt = require('./mqtt/connectMqtt');
 const logger = require('./logger');
+const bodyParser = require('body-parser');
+const mqtt = require('./mqtt/connectMqtt');
 const userRoutes = require('./routes/patientRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
-const bodyParser = require('body-parser');
 
 const app = express();
 

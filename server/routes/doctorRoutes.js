@@ -240,12 +240,12 @@ router.post('/assignPatients', async (req, res, next) => {
                     }
                } else {
                     res
-                    .status(401)
-                    .send({
-                         error: utils.staticVars.SCOPE_ERROR,
-                         message: utils.staticVars.FETCH_ERROR,
-                         data: null
-                    })
+                         .status(401)
+                         .send({
+                              error: utils.staticVars.SCOPE_ERROR,
+                              message: utils.staticVars.FETCH_ERROR,
+                              data: null
+                         })
                }
           }
      }
@@ -277,6 +277,14 @@ router.get('/doctor/getPatientVitals', async (req, res, next) => {
                          message: 'vitals fetched successfully',
                          data: patientsVitalsList
                     })
+               } else {
+                    res
+                         .status(401)
+                         .send({
+                              error: utils.staticVars.SCOPE_ERROR,
+                              message: utils.staticVars.FETCH_ERROR,
+                              data: null
+                         })
                }
           } catch (e) {
                logger.error(e);

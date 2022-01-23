@@ -8,6 +8,7 @@ const patientStore = require('../stores/patientStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists, getDoctorAssignedPatients } = require('../stores/doctorStore');
 const { doctorSignupValidation, doctorLogInValidation, doctorPatientsListValidation, doctorJwtValidation } = require('./doctorValidations');
+const getPatientsSortedList = require('../database/storeUtils/doctorFunctions');
 
 router.post('/doctor/signUp', async (req, res, next) => {
      const { error } = doctorSignupValidation(req.body)
@@ -264,14 +265,7 @@ router.get('/doctor/getPatientVitals', async (req, res, next) => {
                let token = req.headers.authorization;
                const payload = validateJwtToken(token, res, next);
                if (payload.scope === 'Doctor') {
-                    let patientsList = await getDoctorAssignedPatients(payload.id);
-                    let patients = JSON.parse(patientsList.patientsAssigned);
-                    let patientVitals;
-                    let patientsVitalsList = [];
-                    for await (let patient of patients) {
-                         patientVitals = await patientStore.getPatientVitals(patient);
-                         patientsVitalsList.push(patientVitals);
-                    }
+                    let patientsVitalsList = await getPatientsSortedList(payload.id);
                     res.status(200).send({
                          error: '',
                          message: 'vitals fetched successfully',

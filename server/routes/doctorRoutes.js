@@ -90,6 +90,10 @@ router.post('/doctor/login/email', async (req, res, next) => {
                          }
                     } catch (e) {
                          logger.error(e);
+                         return res.status({
+                              error: e,
+                              data: null
+                         })
                     }
 
                }

@@ -108,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         }
                         debugPrint(response.toString());
-                        Token.setScope(response[Parameters.scope]);
+                        Token.setScope(
+                            response[Parameters.scope] ?? Strings.empty);
                         if (!hasError(context, response)) {
                           if (isDoctor) {
                             Navigator.pushReplacementNamed(

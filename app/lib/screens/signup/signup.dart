@@ -219,9 +219,11 @@ class _SignupScreenState extends State<SignupScreen> {
                           maxLength: 10,
                           inputFormatters: [
                             FilteringTextInputFormatter.deny(
-                                RegExp(r'[a-zA-Z]')),
+                              RegExp(r'[a-zA-Z]'),
+                            ),
                             FilteringTextInputFormatter.allow(
-                                RegExp(r'[/0-9]')),
+                              RegExp(r'[/0-9]'),
+                            ),
                           ],
                           onSaved: (value) {
                             dob = value!;

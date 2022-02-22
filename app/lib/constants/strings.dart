@@ -45,7 +45,7 @@ class Strings {
   static const String doctorScope = 'Doctor';
 
   static const String home = 'Home';
-  static const String patientSelect = 'Select Patents';
+  static const String patientSelect = 'Select Patients';
   static const String temperature = 'Temperature';
   static const String spo2level = 'SpO2 Level';
   static const String pulseRate = 'Pulse Rate';

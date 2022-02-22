@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 import 'constants/api.dart';
+import 'constants/parameters.dart';
 import 'constants/preferences.dart';
 import 'constants/routes.dart';
 import 'constants/strings.dart';
 import 'constants/theme.dart';
+import 'models/doctor.dart';
 import 'mqtt/MQTTAppState.dart';
 import 'provider/patient.dart';
 import 'screens/doctor_home/home.dart';
@@ -48,14 +50,13 @@ class MyApp extends StatelessWidget {
                 if (scope == Strings.patientScope) {
                   response = await Api.patientAutoLogin();
                   if (response[Api.error].isEmpty) {
-                    debugPrint(response.toString());
                     return const PatientHomeScreen();
                   }
                 }
                 if (scope == Strings.doctorScope) {
                   response = await Api.doctorAutoLogin();
                   if (response[Api.error].isEmpty) {
-                    debugPrint(response.toString());
+                    Doctor.currentDoctorId = response[Api.data][Parameters.id];
                     return const DoctorHomeScreen();
                   }
                 }

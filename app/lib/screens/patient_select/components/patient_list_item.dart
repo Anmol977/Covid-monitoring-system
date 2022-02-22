@@ -15,9 +15,9 @@ class PatientListItem extends StatefulWidget {
 }
 
 class _PatientListItemState extends State<PatientListItem> {
-  bool added = false;
   @override
   Widget build(BuildContext context) {
+    bool added = Provider.of<Patients>(context).patientAdded(widget.patient.id);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.h),
       child: Container(
@@ -40,10 +40,10 @@ class _PatientListItemState extends State<PatientListItem> {
                   });
                   if (added) {
                     Provider.of<Patients>(context, listen: false)
-                        .addPatient(widget.patient);
+                        .addPatient(widget.patient.id);
                   } else {
                     Provider.of<Patients>(context, listen: false)
-                        .removePatient(widget.patient);
+                        .removePatient(widget.patient.id);
                   }
                 },
               ),

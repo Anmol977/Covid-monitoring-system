@@ -4,21 +4,25 @@ import 'package:covmon/models/patient.dart';
 import 'package:flutter/material.dart';
 
 class Patients with ChangeNotifier {
-  final List<Patient> _patients = [];
+  final List<String> _patientIds = [];
 
-  List<Patient> get patients {
-    return _patients;
+  List<String> get patientIds {
+    return _patientIds;
   }
 
-  void addPatient(Patient patient) {
-    if (!_patients.contains(patient)) {
-      _patients.add(patient);
+  bool patientAdded(String patientId) {
+    return _patientIds.contains(patientId);
+  }
+
+  void addPatient(String patientId) {
+    if (!_patientIds.contains(patientId)) {
+      _patientIds.add(patientId);
       notifyListeners();
     }
   }
 
-  void removePatient(Patient patient) {
-    _patients.remove(patient);
+  void removePatient(String patientId) {
+    _patientIds.remove(patientId);
     notifyListeners();
   }
 

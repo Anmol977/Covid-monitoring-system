@@ -2,6 +2,7 @@ import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/models/doctor.dart';
 import 'package:covmon/models/patient.dart';
 import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               color: AppColors.grayWeb,
               onPressed: () {
                 Token.reset();
+                Doctor.currentDoctorId = Strings.empty;
                 Navigator.pushReplacementNamed(context, Routes.select);
               },
             ),
@@ -56,6 +58,18 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     ),
             );
           },
+        ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: Strings.patientSelect,
+          backgroundColor: AppColors.primaryColor,
+          onPressed: () {
+            Navigator.pushNamed(context, Routes.patientSelect);
+          },
+          child: Icon(
+            Icons.change_circle_outlined,
+            size: 40.r,
+            color: AppColors.backgroundColor,
+          ),
         ),
       ),
     );

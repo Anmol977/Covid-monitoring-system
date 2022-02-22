@@ -57,15 +57,10 @@ class _PatientSelectState extends State<PatientSelect> {
                     child: TextButton(
                       child: const Text(Strings.cont),
                       onPressed: () async {
-                        List<String> selectedPatientsIds = [];
-                        for (Patient patient
-                            in Provider.of<Patients>(context, listen: false)
-                                .patients) {
-                          selectedPatientsIds.add(patient.id);
-                        }
                         Map<String, dynamic> response =
-                            await Api.assignPatients(
-                                json.encode(selectedPatientsIds));
+                            await Api.assignPatients(json.encode(
+                                Provider.of<Patients>(context, listen: false)
+                                    .patientIds));
                         if (!hasError(context, response)) {
                           Navigator.pushReplacementNamed(
                               context, Routes.doctorHome);

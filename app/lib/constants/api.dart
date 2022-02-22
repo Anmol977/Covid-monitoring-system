@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/models/doctor.dart';
 import 'package:covmon/models/patient.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'parameters.dart';
@@ -167,12 +167,10 @@ class Api {
         Strings.authorization: Token.bearerToken,
       },
       body: {
-        //Da Faq
-        Parameters.id: '9407351e-1e38-4f6d-90e5-f9d763c252c5',
+        Parameters.id: Doctor.currentDoctorId,
         Parameters.patientsList: patients,
       },
     );
-    debugPrint(response.body);
     return json.decode(response.body);
   }
 }

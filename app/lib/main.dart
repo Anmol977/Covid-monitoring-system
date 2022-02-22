@@ -45,21 +45,26 @@ class MyApp extends StatelessWidget {
             splash: 'assets/launch_screen.png',
             screenFunction: () async {
               Map<String, dynamic> response;
-              if (await Token.isTokenAlreadySet()) {
-                String scope = await Token.getScope();
-                if (scope == Strings.patientScope) {
-                  response = await Api.patientAutoLogin();
-                  if (response[Api.error].isEmpty) {
-                    return const PatientHomeScreen();
+              try {
+                if (await Token.isTokenAlreadySet()) {
+                  String scope = await Token.getScope();
+                  if (scope == Strings.patientScope) {
+                    response = await Api.patientAutoLogin();
+                    if (response[Api.error].isEmpty) {
+                      return const PatientHomeScreen();
+                    }
+                  }
+                  if (scope == Strings.doctorScope) {
+                    response = await Api.doctorAutoLogin();
+                    if (response[Api.error].isEmpty) {
+                      Doctor.currentDoctorId =
+                          response[Api.data][Parameters.id];
+                      return const DoctorHomeScreen();
+                    }
                   }
                 }
-                if (scope == Strings.doctorScope) {
-                  response = await Api.doctorAutoLogin();
-                  if (response[Api.error].isEmpty) {
-                    Doctor.currentDoctorId = response[Api.data][Parameters.id];
-                    return const DoctorHomeScreen();
-                  }
-                }
+              } catch (e) {
+                debugPrint(e.toString());
               }
               return const SelectorScreen();
             },

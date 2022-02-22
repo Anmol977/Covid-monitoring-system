@@ -32,5 +32,8 @@ module.exports = {
      },
      getPatientVitals: (id) => {
           return db('Patients').select('SpO2', 'fullName', 'roomNo', 'lastUpdated', 'SpO2', 'heartRate', 'temperature', 'status').where({ id }).first();
+     },
+     updatePatientAssignedDoctor: (patientId, doctorId) => {
+          return db('Patients').where({id:patientId}).update({DoctorId: doctorId});
      }
 }

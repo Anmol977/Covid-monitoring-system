@@ -232,8 +232,9 @@ router.post('/assignPatients', async (req, res, next) => {
                const payload = validateJwtToken(token, res, next);
                if (payload.scope === 'Doctor') {
                     const { patientsList, id } = req.body;
-                    for (let patient of patientsList) {
-                         console.log(patient)
+                    let patientsListArray = JSON.parse(patientsList);
+                    for await (let patient of patientsListArray) {
+                         let res = await patientStore.updatePatientAssignedDoctor(patient, id);
                     }
                     const response = await doctorStore.insertPatientsList(patientsList, id);
                     if (response) {

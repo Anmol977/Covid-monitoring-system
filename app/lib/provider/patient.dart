@@ -32,6 +32,7 @@ class Patients with ChangeNotifier {
     response[Parameters.data].forEach((patientData) {
       _patientsVitals.add(Patient.fromMap(patientData));
     });
+    notifyListeners();
     return _patientsVitals;
   }
 }

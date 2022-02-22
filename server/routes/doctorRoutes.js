@@ -66,27 +66,32 @@ router.post('/doctor/login/email', async (req, res, next) => {
                     logger.error(error);
                     return res.status(400).send({ error: error.details[0].message });
                } else {
-                    const token = req.headers.authorization;
-                    const payload = validateJwtToken(token, res, next);
-                    if (payload.scope === 'Doctor') {
-                         let userDetails = await getDoctorDetails(payload.id);
-                         if (userDetails) {
-                              return res
-                                   .status(200)
-                                   .send({
-                                        error: '',
-                                        message: 'Logged In successfully',
-                                        data: userDetails,
-                                   });
-                         } else {
-                              return res
-                                   .status(400)
-                                   .send({
-                                        error: utils.staticVars.GENERAL_ERROR,
-                                        data: null
-                                   });
+                    try {
+                         const token = req.headers.authorization;
+                         const payload = validateJwtToken(token, res, next);
+                         if (payload.scope === 'Doctor') {
+                              let userDetails = await getDoctorDetails(payload.id);
+                              if (userDetails) {
+                                   return res
+                                        .status(200)
+                                        .send({
+                                             error: '',
+                                             message: 'Logged In successfully',
+                                             data: userDetails,
+                                        });
+                              } else {
+                                   return res
+                                        .status(400)
+                                        .send({
+                                             error: utils.staticVars.GENERAL_ERROR,
+                                             data: null
+                                        });
+                              }
                          }
+                    } catch (e) {
+                         logger.error(e);
                     }
+
                }
           }
      } catch (e) {
@@ -223,6 +228,9 @@ router.post('/assignPatients', async (req, res, next) => {
                const payload = validateJwtToken(token, res, next);
                if (payload.scope === 'Doctor') {
                     const { patientsList, id } = req.body;
+                    for (let patient of patientsList) {
+                         console.log(patient)
+                    }
                     const response = await doctorStore.insertPatientsList(patientsList, id);
                     if (response) {
                          res.status(200).send({

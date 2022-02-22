@@ -4,6 +4,7 @@ import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
+import 'package:covmon/models/doctor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 
@@ -107,11 +108,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             password,
                           );
                         }
-                        debugPrint(response.toString());
                         Token.setScope(
                             response[Parameters.scope] ?? Strings.empty);
                         if (!hasError(context, response)) {
                           if (isDoctor) {
+                            Doctor.currentDoctorId =
+                                response[Api.data][Parameters.id];
                             Navigator.pushReplacementNamed(
                                 context, Routes.doctorHome);
                           } else {

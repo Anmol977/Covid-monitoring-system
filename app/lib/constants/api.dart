@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'parameters.dart';
 
 class Api {
-  static const _ipaddress = '192.168.29.24';
+  static const _ipaddress = '192.168.225.78'; //29.24
   static const String _host = 'http://' + _ipaddress + ':5000/';
 
   static const String _patientLogin = 'patient/login/email';
@@ -25,6 +25,10 @@ class Api {
   static const String error = 'error';
   static const String data = 'data';
   static const String message = 'message';
+
+  static get ip {
+    return _ipaddress;
+  }
 
   static Future<Map<String, dynamic>> patientSignup(
     String email,

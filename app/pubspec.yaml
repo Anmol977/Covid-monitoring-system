@@ -42,7 +42,8 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.0.11
   animated_splash_screen: ^1.1.0
-  socket_io_client: ^1.0.2
+  # socket_io_client: ^1.0.2
+  socket_io: ^1.0.1
 
 dev_dependencies:
   flutter_test:

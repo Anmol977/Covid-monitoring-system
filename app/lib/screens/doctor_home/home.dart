@@ -1,6 +1,7 @@
 import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
+import 'package:covmon/constants/socket_server.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/models/doctor.dart';
 import 'package:covmon/models/patient.dart';
@@ -20,6 +21,13 @@ class DoctorHomeScreen extends StatefulWidget {
 
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   List<Patient> patients = [];
+
+  @override
+  void initState() {
+    super.initState();
+    SocketIO.initServer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

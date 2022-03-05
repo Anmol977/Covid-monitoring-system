@@ -1,8 +1,9 @@
 import 'package:socket_io/socket_io.dart';
 
+import 'api.dart';
+
 class SocketIO {
   static void initServer() {
-    // Dart server
     var io = Server();
     var nsp = io.of('/test');
     nsp.on('connection', (client) {

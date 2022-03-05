@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
-import 'package:covmon/mqtt/mqttView.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -272,20 +273,24 @@ class _SignupScreenState extends State<SignupScreen> {
                           );
                         }
                         debugPrint(response.toString());
-                        if (!hasError(context, response)) {
-                          if (isDoctor) {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.patientSelect);
-                          } else {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.patientHome);
+                        try {
+                          if (!hasError(context, response)) {
+                            if (isDoctor) {
+                              Navigator.pushReplacementNamed(
+                                  context, Routes.patientSelect);
+                            } else {
+                              Navigator.pushReplacementNamed(
+                                  context, Routes.patientHome);
+                            }
+                            /* Navigator.push( */
+                            /*   context, */
+                            /*   MaterialPageRoute( */
+                            /*     builder: (context) => MQTTView(), */
+                            /*   ), */
+                            /* ); */
                           }
-                          /* Navigator.push( */
-                          /*   context, */
-                          /*   MaterialPageRoute( */
-                          /*     builder: (context) => MQTTView(), */
-                          /*   ), */
-                          /* ); */
+                        } on SocketException {
+                          showErrorSnackBar(context, Strings.noNetwork);
                         }
                         /* Navigator.pushReplacementNamed(context, Routes.home); */
                       }

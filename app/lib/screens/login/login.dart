@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/parameters.dart';
 import 'package:covmon/constants/preferences.dart';
@@ -110,16 +112,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         Token.setScope(
                             response[Parameters.scope] ?? Strings.empty);
-                        if (!hasError(context, response)) {
-                          if (isDoctor) {
-                            Doctor.currentDoctorId =
-                                response[Api.data][Parameters.id];
-                            Navigator.pushReplacementNamed(
-                                context, Routes.doctorHome);
-                          } else {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.patientHome);
+                        try {
+                          if (!hasError(context, response)) {
+                            if (isDoctor) {
+                              Doctor.currentDoctorId =
+                                  response[Api.data][Parameters.id];
+                              Navigator.pushReplacementNamed(
+                                  context, Routes.doctorHome);
+                            } else {
+                              Navigator.pushReplacementNamed(
+                                  context, Routes.patientHome);
+                            }
                           }
+                        } on SocketException {
+                          showErrorSnackBar(context, Strings.noNetwork);
                         }
                       }
                     },

@@ -27,6 +27,7 @@ class Strings {
   static const String cont = 'Continue';
   static const String incorrectDateFormat = 'Please enter in DD/MM/YYYY format';
   static const String invalidDate = 'Date must be before current date';
+  static const String noNetwork = 'Check internet connectivity';
 
   static const String enterName = 'Please enter your Full Name';
   static const String enterPhone = 'Please enter your Phone Number';

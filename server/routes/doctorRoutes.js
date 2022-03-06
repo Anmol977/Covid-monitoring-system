@@ -190,6 +190,7 @@ router.get('/patients/list', async (req, res, next) => {
                const payload = validateJwtToken(token, res, next);
                if (payload.scope === 'Doctor') {
                     let patientsList = await patientStore.getPatientsList();
+                    logger.info(`patients list generated of length : ${patientsList.length}`);
                     res
                          .status(200)
                          .send({
@@ -233,9 +234,15 @@ router.post('/assignPatients', async (req, res, next) => {
                if (payload.scope === 'Doctor') {
                     const { patientsList, id } = req.body;
                     let patientsListArray = JSON.parse(patientsList);
+
+                    /*
+                    update all patient records with id of the Doctor as DoctorID
+                    */
+                   
                     for await (let patient of patientsListArray) {
                          let res = await patientStore.updatePatientAssignedDoctor(patient, id);
                     }
+
                     const response = await doctorStore.insertPatientsList(patientsList, id);
                     if (response) {
                          res.status(200).send({
@@ -279,6 +286,7 @@ router.get('/doctor/getPatientVitals', async (req, res, next) => {
                const payload = validateJwtToken(token, res, next);
                if (payload.scope === 'Doctor') {
                     let patientsVitalsList = await getPatientsSortedList(payload.id);
+                    console.log('called');
                     res.status(200).send({
                          error: '',
                          message: 'vitals fetched successfully',

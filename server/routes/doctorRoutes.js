@@ -3,12 +3,20 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const logger = require('../logger');
 const utils = require('../utils');
+const { io } = require("socket.io-client");
 const doctorStore = require('../stores/doctorStore');
 const patientStore = require('../stores/patientStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const { checkDoctorExists, create, getDoctorDetails, doctorEmailExists, getDoctorAssignedPatients } = require('../stores/doctorStore');
 const { doctorSignupValidation, doctorLogInValidation, doctorPatientsListValidation, doctorJwtValidation } = require('./doctorValidations');
 const getPatientsSortedList = require('../database/storeUtils/doctorFunctions');
+
+var socket = io('http://localhost:3000');
+socket.on('connect', function(){console.log('connect')});
+socket.on('event', function(data){console.log(data)});
+socket.on('disconnect', function(){console.log('disconnect')});
+socket.on('fromServer', function(e){console.log(e)});
+socket.emit('msg', 'test');
 
 router.post('/doctor/signUp', async (req, res, next) => {
      const { error } = doctorSignupValidation(req.body)
@@ -274,6 +282,18 @@ router.post('/assignPatients', async (req, res, next) => {
 })
 
 router.get('/doctor/getPatientVitals', async (req, res, next) => {
+	 var socket = io('http://localhost:3000/some');
+	 // socket.set('transports', ['websockets']);
+	 socket.on('connect', function() {
+		 console.log('connect');
+		 console.log(socket.id);
+		 socket.emit('msg', 'test node');
+	 });
+	 socket.on('event', function(data){console.log(data)});
+	 socket.on('disconnect', function(){console.log('disconnect')});
+	 socket.on('fromServer', function(e){console.log(e)});
+	socket.connect();
+
      const { error } = doctorJwtValidation(req.headers);
      if (error) {
           logger.error(error);
@@ -286,7 +306,6 @@ router.get('/doctor/getPatientVitals', async (req, res, next) => {
                const payload = validateJwtToken(token, res, next);
                if (payload.scope === 'Doctor') {
                     let patientsVitalsList = await getPatientsSortedList(payload.id);
-                    console.log('called');
                     res.status(200).send({
                          error: '',
                          message: 'vitals fetched successfully',

@@ -25,7 +25,7 @@ module.exports = {
           return db('Patients').where({ phoneNumber }).first();
      },
      getPatientDetails: (id) => {
-          return db('Patients').select('id', 'email', 'phoneNumber', 'roomNo', 'dob', 'fullName', 'SpO2', 'temperature', 'heartRate', 'status').where({ id }).first();
+          return db('Patients').select('id', 'email', 'phoneNumber', 'roomNo', 'dob', 'fullName', 'SpO2', 'temperature', 'heartRate', 'status', 'DoctorId').where({ id }).first();
      },
      getPatientsList: () => {
           return db('Patients').select('roomNo', 'fullName', 'id').where('DoctorId',null);

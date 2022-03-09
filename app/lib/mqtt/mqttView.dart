@@ -77,7 +77,7 @@ class _MQTTViewState extends State<MQTTView> {
 
   Widget _buildEditableColumn() {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: <Widget>[
           _buildTextFieldWith(_hostTextController, 'Enter broker address',

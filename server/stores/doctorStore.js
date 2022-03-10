@@ -33,5 +33,8 @@ module.exports = {
      },
      getDoctorAssignedPatients: (id) => {
           return db('Doctors').select('patientsAssigned').where({ id }).first();
+     },
+     getDoctorsList: ()=>{
+          return db('Doctors').select('id');
      }
 }

@@ -1,7 +1,7 @@
 import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
-import 'package:covmon/constants/socket_server.dart';
+import 'package:covmon/constants/socket.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/models/doctor.dart';
 import 'package:covmon/models/patient.dart';
@@ -24,8 +24,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   @override
   void initState() {
+    SocketIO.sendData('9407351e-1e38-4f6d-90e5-f9d763c252c5', 'test', 'test');
     super.initState();
-    SocketIO.initServer();
   }
 
   @override

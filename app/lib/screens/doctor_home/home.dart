@@ -23,18 +23,9 @@ class DoctorHomeScreen extends StatefulWidget {
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   List<Patient> patients = [];
 
-  late io.Socket socket;
-
   @override
   void initState() {
-    socket = io.io(
-      'http://192.168.0.104:5000',
-      io.OptionBuilder().setTransports( ['websocket'],).build()
-    );
-
-    socket.onConnect((_){
-        print('connected to socket server');
-    });
+    SocketIO.connectToServer();
     /* SocketIO.sendData( */
     /*   '9407351e-1e38-4f6d-90e5-f9d763c252c5', */
     /*   'test', */
@@ -45,7 +36,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    socket.connect();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

@@ -3,6 +3,8 @@ const patientStore = require('../../stores/patientStore');
 
 async function getPatientsSortedList (id){
     let patientsList = await doctorStore.getDoctorAssignedPatients(id);
+    if(patientsList.patientsAssigned == null)
+        return [];
     let patients = JSON.parse(patientsList.patientsAssigned);
     let patientVitals;
     let patientsVitalsList = [];

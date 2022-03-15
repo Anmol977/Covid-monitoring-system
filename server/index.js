@@ -39,14 +39,10 @@ const server = app.listen(5000, async (req, res) => {
   socketIo = createSocketServer(server);
   socketIo.on("connection",(socket)=>{
     logger.info(`socket connected with id ${socket.id}`);
-    // socket.join();
-  
-  })
-
-  const adminNamespace = socketIo.of('/patientDoctorId');
-  
-  adminNamespace.on('connection', socket => {
-    console.log(socket.id);
+    socket.on('patientDoctorId',(data)=>{
+      logger.info(`created room with id ${data}`);
+      socket.join(data);
+  });
   });
 
 app.use(userRoutes, doctorRoutes);

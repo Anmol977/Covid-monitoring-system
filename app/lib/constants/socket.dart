@@ -20,15 +20,13 @@ class SocketIO {
       debugPrint('connected to socket server');
       sendData(topic, doctorId);
     });
+
   }
 
   static void sendData(String topic, String message) {
-    print('hello jello');
     if (!isConnected) {
       return;
     }
-    print(topic);
-    print(message);
     socket.emit(topic, message);
   }
 }

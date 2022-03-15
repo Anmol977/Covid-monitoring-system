@@ -41,36 +41,38 @@ class MyApp extends StatelessWidget {
           title: Strings.appTitle,
           theme: theme(),
           routes: routes,
-          home: AnimatedSplashScreen.withScreenFunction(
-            splash: 'assets/launch_screen.png',
-            screenFunction: () async {
-              Map<String, dynamic> response;
-              try {
-                if (await Token.isTokenAlreadySet()) {
-                  String scope = await Token.getScope();
-                  if (scope == Strings.patientScope) {
-                    response = await Api.patientAutoLogin();
-                    if (response[Api.error].isEmpty) {
-                      Provider.of<Patients>(context, listen: false)
-                          .setCurrentPatient = response;
-                      return const PatientHomeScreen();
+          home: Builder(builder: (context) {
+            return AnimatedSplashScreen.withScreenFunction(
+              splash: 'assets/launch_screen.png',
+              screenFunction: () async {
+                Map<String, dynamic> response;
+                try {
+                  if (await Token.isTokenAlreadySet()) {
+                    String scope = await Token.getScope();
+                    if (scope == Strings.patientScope) {
+                      response = await Api.patientAutoLogin();
+                      if (response[Api.error].isEmpty) {
+                        Provider.of<Patients>(context, listen: false)
+                            .setCurrentPatient = response;
+                        return const PatientHomeScreen();
+                      }
+                    }
+                    if (scope == Strings.doctorScope) {
+                      response = await Api.doctorAutoLogin();
+                      if (response[Api.error].isEmpty) {
+                        Doctor.currentDoctorId =
+                            response[Api.data][Parameters.id];
+                        return const DoctorHomeScreen();
+                      }
                     }
                   }
-                  if (scope == Strings.doctorScope) {
-                    response = await Api.doctorAutoLogin();
-                    if (response[Api.error].isEmpty) {
-                      Doctor.currentDoctorId =
-                          response[Api.data][Parameters.id];
-                      return const DoctorHomeScreen();
-                    }
-                  }
+                } catch (e) {
+                  debugPrint(e.toString());
                 }
-              } catch (e) {
-                debugPrint(e.toString());
-              }
-              return const SelectorScreen();
-            },
-          ),
+                return const SelectorScreen();
+              },
+            );
+          }),
         ),
       ),
     );

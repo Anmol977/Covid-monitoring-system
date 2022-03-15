@@ -24,7 +24,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<Patients>(context, listen: false).currentPatient.toMap());
     SocketIO.connectToServer(
       'patientDoctorId',
       Provider.of<Patients>(context, listen: false).currentPatient.doctorId,

@@ -272,7 +272,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             roomNo,
                           );
                         }
-                        debugPrint(response.toString());
                         try {
                           if (!hasError(context, response)) {
                             if (isDoctor) {

@@ -11,6 +11,7 @@ class Patient {
   String pulseRate;
   String temperature;
   String status;
+  String doctorId;
 
   Patient({
     required this.id,
@@ -22,6 +23,7 @@ class Patient {
     required this.temperature,
     required this.status,
     required this.pulseRate,
+    required this.doctorId,
   });
 
   factory Patient.empty() => Patient(
@@ -34,6 +36,7 @@ class Patient {
         status: Strings.empty,
         temperature: Strings.empty,
         pulseRate: Strings.empty,
+        doctorId: Strings.empty,
       );
 
   factory Patient.fromMap(Map data) => Patient(
@@ -46,6 +49,7 @@ class Patient {
         status: data[Parameters.status] ?? Strings.empty,
         temperature: data[Parameters.temperature] ?? Strings.empty,
         pulseRate: data[Parameters.pulseRate] ?? Strings.empty,
+        doctorId: data[Parameters.doctorId] ?? Strings.empty,
       );
 
   Map<String, dynamic> toMap() => {
@@ -58,5 +62,6 @@ class Patient {
         Parameters.temperature: temperature,
         Parameters.status: status,
         Parameters.pulseRate: pulseRate,
+        Parameters.doctorId: doctorId,
       };
 }

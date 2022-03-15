@@ -8,7 +8,7 @@ class SocketIO {
   static late io.Socket socket;
   static bool isConnected = false;
 
-  static void connectToServer() {
+  static void connectToServer(String topic, String doctorId) {
     socket = io.io(
         serverIp,
         io.OptionBuilder().setTransports(
@@ -18,13 +18,17 @@ class SocketIO {
     socket.onConnect((_) {
       isConnected = true;
       debugPrint('connected to socket server');
+      sendData(topic, doctorId);
     });
   }
 
   static void sendData(String topic, String message) {
+    print('hello jello');
     if (!isConnected) {
       return;
     }
+    print(topic);
+    print(message);
     socket.emit(topic, message);
   }
 }

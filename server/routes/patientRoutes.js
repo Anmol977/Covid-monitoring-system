@@ -104,6 +104,7 @@ router.post('/patient/login/email', async (req, res, next) => {
                const { email, password } = req.body;
                let emailExists = await patientEmailExists(email);
                if (!emailExists) {
+                    logger.error(`email ${email} does not exist, failed to Log-In`);
                     return res
                          .status(400)
                          .send({

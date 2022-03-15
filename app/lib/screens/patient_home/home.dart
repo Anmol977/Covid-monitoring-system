@@ -19,12 +19,16 @@ class PatientHomeScreen extends StatefulWidget {
 class _PatientHomeScreenState extends State<PatientHomeScreen> {
   @override
   void initState() {
-    SocketIO.connectToServer();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<Patients>(context, listen: false).currentPatient.toMap());
+    SocketIO.connectToServer(
+      'patientDoctorId',
+      Provider.of<Patients>(context, listen: false).currentPatient.doctorId,
+    );
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -61,12 +65,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           child: FutureBuilder(
             future: MQTTBroker.configureMQTT(),
             builder: (context, snapshot) {
-              SocketIO.sendData(
-                'patientDoctorId',
-                Provider.of<Patients>(context, listen: false)
-                    .currentPatient
-                    .doctorId,
-              );
               return GridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 0.05.sw,

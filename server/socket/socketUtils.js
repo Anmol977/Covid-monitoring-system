@@ -1,23 +1,20 @@
 const { Server } = require("socket.io");
 const logger = require('../logger')
 
-function createSocketServer(httpServer){
-    const ioSocket = new Server(httpServer);
-    return ioSocket;
+function createSocketServer(server){
+    const socketInstance = require("socket.io")(server);
+    return socketInstance;
 }
 
-function initSocket( ioSocketServer, doctorId) {
+function joinRoom( socket, doctorId) {
     try{
-        var nsp = ioSocketServer.of(`/${doctorId}`);
-        logger.info(`socket created with id : ${nsp.name}`);
-        return nsp;
+        socket.join(doctorId);
     } catch(e)
     {
         logger.error(e);
         return null;
     }
-
-
 }
 
-module.exports = {initSocket, createSocketServer};
+
+module.exports = {joinRoom, createSocketServer};

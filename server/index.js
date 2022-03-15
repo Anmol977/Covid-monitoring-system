@@ -1,19 +1,15 @@
-require("dotenv").config();
-const express = require("express");
-const db = require("./db");
-const logger = require("./logger");
-const bodyParser = require("body-parser");
-const mqtt = require("./mqtt/connectMqtt");
-const userRoutes = require("./routes/patientRoutes");
-const doctorRoutes = require("./routes/doctorRoutes");
-const { initSocket, createSocketServer } = require("./socket/socketUtils");
+require('dotenv').config()
+const express = require('express');
+const db = require('./db');
+const logger = require('./logger');
+const bodyParser = require('body-parser');
+const mqtt = require('./mqtt/connectMqtt');
+const userRoutes = require('./routes/patientRoutes');
+const doctorRoutes = require('./routes/doctorRoutes');
+const { joinRoom, createSocketServer } = require('./socket/socketUtils');
 const { createServer } = require("http");
-const { getDoctorsList } = require("./stores/doctorStore");
-const io = require("socket.io-client");
-const { closeSync } = require("fs");
 
 const app = express();
-const httpServer = createServer();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -22,7 +18,7 @@ app.use(bodyParser.json());
 (async () => {
   try {
     await db.migrate.latest().then(() => {
-      logger.info("database migrations complete...");
+      logger.info('database migrations complete...');
     });
   } catch (e) {
     logger.error(e);
@@ -40,10 +36,17 @@ const server = app.listen(5000, async (req, res) => {
   // }
 });
 
-const socketInstance = require("socket.io")(server);
+  socketIo = createSocketServer(server);
+  socketIo.on("connection",(socket)=>{
+    logger.info(`socket connected with id ${socket.id}`);
+    // socket.join();
+  
+  })
 
-socketInstance.on("connection", (_socket) => {
-  console.log("socket connected");
-});
+  const adminNamespace = socketIo.of('/patientDoctorId');
+  
+  adminNamespace.on('connection', socket => {
+    console.log(socket.id);
+  });
 
 app.use(userRoutes, doctorRoutes);

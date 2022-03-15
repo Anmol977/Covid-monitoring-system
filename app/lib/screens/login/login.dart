@@ -7,8 +7,10 @@ import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/constants/utils.dart';
 import 'package:covmon/models/doctor.dart';
+import 'package:covmon/provider/patient.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -120,6 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.pushReplacementNamed(
                                   context, Routes.doctorHome);
                             } else {
+                              Provider.of<Patients>(context, listen: false)
+                                  .setCurrentPatient = response;
                               Navigator.pushReplacementNamed(
                                   context, Routes.patientHome);
                             }

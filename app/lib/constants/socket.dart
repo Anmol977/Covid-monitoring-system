@@ -6,6 +6,7 @@ import 'api.dart';
 class SocketIO {
   static String serverIp = 'http://${Api.ip}:5000/';
   static late io.Socket socket;
+  static bool isConnected = false;
 
   static void connectToServer() {
     socket = io.io(
@@ -15,9 +16,15 @@ class SocketIO {
         ).build());
 
     socket.onConnect((_) {
+      isConnected = true;
       debugPrint('connected to socket server');
     });
   }
 
-  static void sendData(String id, String topic, String message) {}
+  static void sendData(String topic, String message) {
+    if (!isConnected) {
+      return;
+    }
+    socket.emit(topic, message);
+  }
 }

@@ -2,9 +2,12 @@ import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/mqtt.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
+import 'package:covmon/constants/socket.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class PatientHomeScreen extends StatefulWidget {
   const PatientHomeScreen({Key? key}) : super(key: key);
@@ -14,6 +17,12 @@ class PatientHomeScreen extends StatefulWidget {
 }
 
 class _PatientHomeScreenState extends State<PatientHomeScreen> {
+  @override
+  void initState() {
+    SocketIO.connectToServer();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,7 +45,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           tooltip: Strings.notifyDoctor,
           backgroundColor: AppColors.primaryColor,
           onPressed: () {
-            print("Doctor evolved into The FLASH!!!");
+            debugPrint("Doctor evolved into The FLASH!!!");
           },
           child: Icon(
             Icons.notifications_on_outlined,
@@ -52,6 +61,12 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           child: FutureBuilder(
             future: MQTTBroker.configureMQTT(),
             builder: (context, snapshot) {
+              SocketIO.sendData(
+                'patientDoctorId',
+                Provider.of<Patients>(context, listen: false)
+                    .currentPatient
+                    .doctorId,
+              );
               return GridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 0.05.sw,

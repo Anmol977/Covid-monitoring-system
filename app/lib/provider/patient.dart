@@ -5,6 +5,15 @@ import 'package:flutter/material.dart';
 
 class Patients with ChangeNotifier {
   final List<String> _patientIds = [];
+  Patient _currentPatient = Patient.empty();
+
+  Patient get currentPatient {
+    return _currentPatient;
+  }
+
+  set setCurrentPatient(Map<String, dynamic> patientDataMap) {
+    _currentPatient = Patient.fromMap(patientDataMap[Parameters.data]);
+  }
 
   List<String> get patientIds {
     return _patientIds;

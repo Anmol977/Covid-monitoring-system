@@ -9,7 +9,6 @@ import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'components/patient_vitals_list.dart';
 
@@ -26,11 +25,6 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   @override
   void initState() {
     SocketIO.connectToServer();
-    /* SocketIO.sendData( */
-    /*   '9407351e-1e38-4f6d-90e5-f9d763c252c5', */
-    /*   'test', */
-    /*   'testData', */
-    /* ); */
     super.initState();
   }
 

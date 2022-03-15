@@ -51,6 +51,8 @@ class MyApp extends StatelessWidget {
                   if (scope == Strings.patientScope) {
                     response = await Api.patientAutoLogin();
                     if (response[Api.error].isEmpty) {
+                      Provider.of<Patients>(context, listen: false)
+                          .setCurrentPatient = response;
                       return const PatientHomeScreen();
                     }
                   }

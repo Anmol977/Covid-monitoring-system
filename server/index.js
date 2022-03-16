@@ -27,22 +27,18 @@ app.use(bodyParser.json());
 
 const server = app.listen(5000, async (req, res) => {
   logger.info("server running on port : 5000");
-
-  // const doctorIdList = await getDoctorsList();
-  // logger.info('creating sockets for users...');
-  // let socketRooms = {};
-  // for await (let idObject of doctorIdList) {
-  //   socketRooms[idObject.id] = initSocket(socketInstance, idObject.id);
-  // }
 });
 
-  socketIo = createSocketServer(server);
-  socketIo.on("connection",(socket)=>{
-    logger.info(`socket connected with id ${socket.id}`);
-    socket.on('patientDoctorId',(data)=>{
-      logger.info(`created room with id ${data}`);
-      socket.join(data);
+socketIo = createSocketServer(server);
+socketIo.on("connection", (socket) => {
+  logger.info(`socket connected with id ${socket.id}`);
+  socket.on('patientDoctorId', (data) => {
+    logger.info(`created room with id ${data}`);
+    socket.join(data);
   });
-  });
+  socketIo.on('sendVitalsToDoctor',(data) =>{
+    socket.to(data.doctorId).emit(data);
+  })
+});
 
 app.use(userRoutes, doctorRoutes);

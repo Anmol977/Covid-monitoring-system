@@ -36,8 +36,9 @@ socketIo.on("connection", (socket) => {
     logger.info(`created room with id ${data}`);
     socket.join(data);
   });
-  socketIo.on('sendVitalsToDoctor',(data) =>{
-    socket.to(data.doctorId).emit(data);
+  socket.on('sendVitalsToDoctor',(data) =>{
+		let newData = JSON.parse(data);
+		socketIo.emit(newData.DoctorId, data);
   })
 });
 

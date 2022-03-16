@@ -78,7 +78,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
               if (SocketIO.socket.connected) {
                 SocketIO.sendData('patientDoctorId', patient.doctorId);
                 SocketIO.sendData(
-                    patient.id,
+                    'sendVitalsToDoctor',
                     json.encode(
                       <String, String>{
                         Parameters.patientId: patient.id,

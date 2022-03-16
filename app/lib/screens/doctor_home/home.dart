@@ -5,6 +5,7 @@ import 'package:covmon/constants/socket.dart';
 import 'package:covmon/constants/strings.dart';
 import 'package:covmon/models/doctor.dart';
 import 'package:covmon/models/patient.dart';
+import 'package:covmon/provider/doctor.dart';
 import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,7 +30,17 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   }
 
   @override
+  void dispose() {
+    SocketIO.socket.dispose();
+    Token.reset();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    SocketIO.socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) {
+      debugPrint(data.toString());
+    });
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

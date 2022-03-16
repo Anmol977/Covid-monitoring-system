@@ -24,7 +24,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   @override
   void initState() {
-    // SocketIO.connectToServer();
+    SocketIO.connectToServer();
     super.initState();
   }
 

@@ -11,6 +11,7 @@ import 'constants/strings.dart';
 import 'constants/theme.dart';
 import 'models/doctor.dart';
 import 'mqtt/MQTTAppState.dart';
+import 'provider/doctor.dart';
 import 'provider/patient.dart';
 import 'screens/doctor_home/home.dart';
 import 'screens/patient_home/home.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => Patients(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Doctors(),
         ),
       ],
       child: ScreenUtilInit(
@@ -60,6 +64,8 @@ class MyApp extends StatelessWidget {
                     if (scope == Strings.doctorScope) {
                       response = await Api.doctorAutoLogin();
                       if (response[Api.error].isEmpty) {
+                        Provider.of<Doctors>(context, listen: false)
+                            .setCurrentDoctor = response;
                         Doctor.currentDoctorId =
                             response[Api.data][Parameters.id];
                         return const DoctorHomeScreen();

@@ -10,6 +10,7 @@ class PatientVitals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key(patient.id),
       color: statusColor(patient.status),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

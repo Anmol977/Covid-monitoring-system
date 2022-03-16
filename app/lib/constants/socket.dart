@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -6,9 +8,9 @@ import 'api.dart';
 class SocketIO {
   static String serverIp = 'http://${Api.ip}:5000/';
   static late io.Socket socket;
-  static bool isConnected = false;
+  static StreamSocket streamSocket = StreamSocket();
 
-  static void connectToServer(String topic, String doctorId) {
+  static void connectToServer() {
     socket = io.io(
         serverIp,
         io.OptionBuilder().setTransports(
@@ -16,17 +18,27 @@ class SocketIO {
         ).build());
 
     socket.onConnect((_) {
-      isConnected = true;
       debugPrint('connected to socket server');
-      sendData(topic, doctorId);
     });
-
   }
 
   static void sendData(String topic, String message) {
-    if (!isConnected) {
-      return;
-    }
     socket.emit(topic, message);
+  }
+
+  static void listenTo(String event) {
+    socket.on(event, (data) => streamSocket.addResponse);
+  }
+}
+
+class StreamSocket {
+  final _socketResponse = StreamController<String>();
+
+  void Function(String) get addResponse => _socketResponse.sink.add;
+
+  Stream<String> get getResponse => _socketResponse.stream;
+
+  void dispose() {
+    _socketResponse.close();
   }
 }

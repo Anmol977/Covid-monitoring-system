@@ -43,12 +43,12 @@ class Patient {
         id: data[Parameters.id] ?? Strings.empty,
         fullName: data[Parameters.fullName] ?? Strings.empty,
         roomNo: data[Parameters.roomNo] ?? Strings.empty,
-        heartRate: data[Parameters.heartRate] ?? Strings.empty,
+        heartRate: data[Parameters.heartRate] ?? Strings.zero,
         lastUpdated: data[Parameters.lastUpdated] ?? Strings.empty,
-        spO2: data[Parameters.spO2] ?? Strings.empty,
+        spO2: data[Parameters.spO2] ?? Strings.zero,
         status: data[Parameters.status] ?? Strings.empty,
-        temperature: data[Parameters.temperature] ?? Strings.empty,
-        pulseRate: data[Parameters.pulseRate] ?? Strings.empty,
+        temperature: data[Parameters.temperature] ?? Strings.zero,
+        pulseRate: data[Parameters.pulseRate] ?? Strings.zero,
         doctorId: data[Parameters.doctorId] ?? Strings.empty,
       );
 

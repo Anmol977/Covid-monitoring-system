@@ -1,4 +1,3 @@
-const { Server } = require("socket.io");
 const logger = require('../logger')
 
 function createSocketServer(server){
@@ -6,15 +5,4 @@ function createSocketServer(server){
     return socketInstance;
 }
 
-function joinRoom( socket, doctorId) {
-    try{
-        socket.join(doctorId);
-    } catch(e)
-    {
-        logger.error(e);
-        return null;
-    }
-}
-
-
-module.exports = {joinRoom, createSocketServer};
+module.exports = { createSocketServer};

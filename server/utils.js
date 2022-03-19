@@ -11,6 +11,7 @@ module.exports = {
           LIST_UPDATED: 'patients list updated successfully',
           LIST_ERROR: 'error updating patients list',
           PATIENT: 'Patient',
-          DOCTOR: 'Doctor'
+          DOCTOR: 'Doctor',
+          AUTH_ERROR : 'not authorized to do this action'
      }
 }

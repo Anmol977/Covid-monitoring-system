@@ -5,8 +5,9 @@ const utils = require('../utils');
 const logger = require('../logger');
 const { staticVars } = require('../utils');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
-const { patientSignupValidation, patientLogInValidation, patientJwtValidation } = require('./patientValidations');
+const { patientSignupValidation, patientLogInValidation, patientJwtValidation, patientVitalsValidation } = require('./patientValidations');
 const { patientEmailExists, patientPhoneExists, create, getPatientDetails, checkPatientExists } = require('../stores/patientStore');
+const patientStore = require('../stores/patientStore');
 
 router.post('/patient/signUp', async (req, res, next) => {
      const { error } = patientSignupValidation(req.body)
@@ -83,6 +84,13 @@ router.post('/patient/login/email', async (req, res, next) => {
                                         data: null
                                    });
                          }
+                    } else {
+                         return res
+                         .status(401)
+                         .send({
+                              error: utils.staticVars.AUTH_ERROR,
+                              data: null
+                         });
                     }
                }
           }
@@ -144,6 +152,52 @@ router.post('/patient/login/email', async (req, res, next) => {
                          data: null
                     });
           }
+     }
+});
+
+router.post('savePatientVitals', async (req, res, next)=>{
+     try{
+          if(req.headers.authorization){
+               const { error } = patientJwtValidation(req.headers);
+               if (error) {
+                    logger.error(error);
+                    return res.status(400).send(error.details[0].message);
+               } else {
+                    const token = req.headers.authorization;
+                    const payload = validateJwtToken(token, res, next);
+                    if (payload.scope === 'Patient') {
+                         const {error} = patientVitalsValidation(req.body);
+                         if(error){
+                              return res.status(400).send({
+                                   error: error,
+                                   data : null
+                              });
+                         } else {
+                              let patientDetails = patientStore.getPatientDetails(payload.id);
+                              console.log(patientDetails);
+                         }
+                    } else {
+                         return res
+                         .status(401)
+                         .send({
+                              error: utils.staticVars.AUTH_ERROR,
+                              data: null
+                         });
+                    }
+               }
+          } else {
+               return res.status(401).send({
+                    error: staticVars.GENERAL_ERROR,
+                    data: null
+               });
+          }
+     } catch(e){
+          return res
+          .status(500)
+          .send({
+               error: e,
+               data: null
+          });
      }
 })
 

@@ -1,4 +1,5 @@
 const joi = require('joi');
+const { doctorJwtValidation } = require('./doctorValidations');
 
 const patientSignupValidation = data => {
      const schema = joi.object({
@@ -29,4 +30,14 @@ const patientJwtValidation = data => {
      return schema.validate(data);
 }
 
-module.exports = { patientSignupValidation, patientLogInValidation, patientJwtValidation };
+const patientVitalsValidation = data => {
+     const schema = joi.object({
+          spO2 : joi.required().string(),
+          heartRate : joi.required().string(),
+          temperature : joi.required().string(),
+          status : joi.required().string()
+     })
+     return schema.validate(data);
+}
+
+module.exports = { patientSignupValidation, patientLogInValidation, patientJwtValidation, patientVitalsValidation };

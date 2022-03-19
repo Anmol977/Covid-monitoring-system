@@ -37,7 +37,7 @@ socketIo.on("connection", (socket) => {
     socket.join(data);
   });
   socketIo.on('sendVitalsToDoctor',(data) =>{
-    socket.to(data.doctorId).emit(data);
+    socket.to(data.DoctorId).emit(data);
   })
 });
 

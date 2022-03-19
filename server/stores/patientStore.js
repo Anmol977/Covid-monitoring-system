@@ -33,8 +33,14 @@ module.exports = {
      getPatientVitals: (id) => {
           return db('Patients').select('SpO2', 'fullName', 'roomNo', 'lastUpdated', 'SpO2', 'heartRate', 'temperature', 'status').where({ id }).first();
      },
-     setPatientVitals : (id, data) =>{
-          return db('Patients').where({id}).update(data);
+     setPatientVitals : (id, data, lastUpdated) =>{
+          return db('Patients').where({id}).update({
+               temperature:data.temperature,
+                SpO2: data.SpO2,
+                 heartRate:data.heartRate,
+                  status : data.status,
+                  lastUpdated : lastUpdated
+               });
      },
      updatePatientAssignedDoctor: (patientId, doctorId) => {
           return db('Patients').where({id:patientId}).update({DoctorId: doctorId});

@@ -1,5 +1,3 @@
-
-
 module.exports = {
      staticVars: {
           SUCCESS_FETCH: 'Details fetched successfully',
@@ -14,5 +12,16 @@ module.exports = {
           DOCTOR: 'Doctor',
           AUTH_ERROR : 'user not authorized to do this action',
           VITALS_SUCCESS : 'user vitals updated successfully',
+     },
+     classifyPatients : (vitals) => {
+          const {SpO2, temperature, heartRate} = vitals;
+          if(SpO2 > 95 || heartRate <= 100 || temperature <=37.2)
+               return 'non-symptomatic';
+          if( SpO2 > 95 || heartRate <= 100 || 37 < temperature <=38)
+               return 'mild';
+          if( 93 < SpO2 < 95 || heartRate > 120 || temperature >=38)
+               return 'serious';
+          if( SpO2 < 92 || heartRate > 120 || temperature >=38)
+               return 'occurance of comorbidities';
      }
 }

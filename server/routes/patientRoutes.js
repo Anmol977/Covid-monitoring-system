@@ -155,7 +155,7 @@ router.post('/patient/login/email', async (req, res, next) => {
      }
 });
 
-router.post('savePatientVitals', async (req, res, next)=>{
+router.post('/savePatientVitals', async (req, res, next)=>{
      try{
           if(req.headers.authorization){
                const { error } = patientJwtValidation(req.headers);

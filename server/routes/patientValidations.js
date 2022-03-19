@@ -32,10 +32,10 @@ const patientJwtValidation = data => {
 
 const patientVitalsValidation = data => {
      const schema = joi.object({
-          spO2 : joi.required().string(),
-          heartRate : joi.required().string(),
-          temperature : joi.required().string(),
-          status : joi.required().string()
+          spO2 : joi.string().required(),
+          heartRate : joi.string().required(),
+          temperature : joi.string().required(),
+          status : joi.string().required()
      })
      return schema.validate(data);
 }

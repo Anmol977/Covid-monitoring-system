@@ -35,7 +35,7 @@ const patientVitalsValidation = data => {
           SpO2 : joi.string().required(),
           heartRate : joi.string().required(),
           temperature : joi.string().required(),
-          status : joi.string().required()
+          status : joi.string().allow(null,'')
      })
      return schema.validate(data);
 }

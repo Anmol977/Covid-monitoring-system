@@ -168,7 +168,7 @@ router.post('/savePatientVitals', async (req, res, next)=>{
                     if (payload.scope === 'Patient') {
                          const {error} = patientVitalsValidation(req.body);
                          if(error){
-                              logger.error('validation error occured while updating vitals')
+                              logger.error(error);
                               return res.status(400).send({
                                    error: error,
                                    data : null

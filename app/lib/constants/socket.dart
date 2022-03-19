@@ -16,9 +16,9 @@ class SocketIO {
 
     socket.onConnect((_) {
       debugPrint('connected to socket server');
-      socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) {
-        debugPrint(data.toString());
-      });
+      /* socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) { */
+      /*   debugPrint(data.toString()); */
+      /* }); */
     });
   }
 

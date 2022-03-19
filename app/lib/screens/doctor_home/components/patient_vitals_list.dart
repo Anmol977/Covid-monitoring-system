@@ -25,9 +25,10 @@ class PatientVitals extends StatelessWidget {
             ),
             Text(Strings.temperature + Strings.colon + patient.temperature),
             Text(Strings.spo2level + Strings.colon + patient.spO2),
-            Text(Strings.pulseRate + Strings.colon + patient.pulseRate),
             Text(Strings.heartRate + Strings.colon + patient.heartRate),
-            Text(patient.lastUpdated),
+            Text(
+              Strings.updatedOn + patient.lastUpdated,
+            ),
           ],
         ),
       ),

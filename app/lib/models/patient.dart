@@ -8,7 +8,6 @@ class Patient {
   String spO2;
   String lastUpdated;
   String heartRate;
-  String pulseRate;
   String temperature;
   String status;
   String doctorId;
@@ -22,7 +21,6 @@ class Patient {
     required this.heartRate,
     required this.temperature,
     required this.status,
-    required this.pulseRate,
     required this.doctorId,
   });
 
@@ -35,7 +33,6 @@ class Patient {
         spO2: Strings.empty,
         status: Strings.empty,
         temperature: Strings.empty,
-        pulseRate: Strings.empty,
         doctorId: Strings.empty,
       );
 
@@ -48,7 +45,6 @@ class Patient {
         spO2: data[Parameters.spO2] ?? Strings.zero,
         status: data[Parameters.status] ?? Strings.empty,
         temperature: data[Parameters.temperature] ?? Strings.zero,
-        pulseRate: data[Parameters.pulseRate] ?? Strings.zero,
         doctorId: data[Parameters.doctorId] ?? Strings.empty,
       );
 
@@ -61,7 +57,6 @@ class Patient {
         Parameters.heartRate: heartRate,
         Parameters.temperature: temperature,
         Parameters.status: status,
-        Parameters.pulseRate: pulseRate,
         Parameters.doctorId: doctorId,
       };
 }

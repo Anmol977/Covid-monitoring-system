@@ -1,3 +1,5 @@
+import 'package:covmon/constants/parameters.dart';
+
 class Strings {
   static const String appTitle = 'CovMon';
   static const String fontFamily = 'RobotoSlab';
@@ -53,8 +55,16 @@ class Strings {
   static const String heartRate = 'Heart Rate';
   static const String notifyDoctor = 'Notify Doctor';
   static const String zero = '0';
+  static const String updatedOn = 'Updated On : ';
+
   static const String assignedDoctor = 'Assigned Doctor: ';
   static const String status = 'STATUS: ';
   static const String roomNo = 'Room No. ';
   static const String noPatient = 'No Patients';
+
+  static const List<String> topics = [
+    Parameters.temperature,
+    Parameters.heartRate,
+    Parameters.spO2,
+  ];
 }

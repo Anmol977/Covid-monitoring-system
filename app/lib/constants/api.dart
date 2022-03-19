@@ -21,6 +21,7 @@ class Api {
 
   static const String _patientList = 'patients/list';
   static const String _assignPatients = 'assignPatients';
+  static const String _savePatientVitals = 'savePatientVitals';
 
   static const String error = 'error';
   static const String data = 'data';
@@ -110,6 +111,21 @@ class Api {
     return json.decode(response.body);
   }
 
+  static Future<void> savePatientVitals(Patient patient) async {
+    await http.post(
+      Uri.parse(_host + _savePatientVitals),
+      body: {
+        Parameters.heartRate: patient.heartRate,
+        Parameters.SpO2: patient.spO2,
+        Parameters.temperature: patient.temperature,
+        Parameters.status: patient.status,
+      },
+      headers: {
+        Strings.authorization: Token.bearerToken,
+      },
+    );
+  }
+
   static Future<Map<String, dynamic>> doctorAutoLogin() async {
     http.Response response = await http.post(
       Uri.parse(_host + _doctorLogin),
@@ -154,15 +170,15 @@ class Api {
     return patients;
   }
 
-  static Future<Map<String, dynamic>> getPatientsVitals() async {
-    http.Response response = await http.get(
-      Uri.parse(_host + _getPatientVitals),
-      headers: {
-        Strings.authorization: Token.bearerToken,
-      },
-    );
-    return json.decode(response.body);
-  }
+  /* static Future<Map<String, dynamic>> getPatientsVitals() async { */
+  /*   http.Response response = await http.get( */
+  /*     Uri.parse(_host + _getPatientVitals), */
+  /*     headers: { */
+  /*       Strings.authorization: Token.bearerToken, */
+  /*     }, */
+  /*   ); */
+  /*   return json.decode(response.body); */
+  /* } */
 
   static Future<Map<String, dynamic>> assignPatients(String patients) async {
     http.Response response = await http.post(

@@ -38,9 +38,10 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SocketIO.socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) {
-      debugPrint(data.toString());
-    });
+    SocketIO.addEventListenerTo(Provider.of<Doctors>(context).currentDoctor.id);
+    /* SocketIO.socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) { */
+    /*   debugPrint(data.toString()); */
+    /* }); */
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

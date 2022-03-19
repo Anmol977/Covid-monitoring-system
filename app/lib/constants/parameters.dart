@@ -17,6 +17,8 @@ class Parameters {
   static const String status = 'status';
   static const String doctorId = 'DoctorId';
   static const String patientId = 'patientId';
+  // ignore: constant_identifier_names
+  static const String SpO2 = 'SpO2';
 
   static const String cookie = 'set-cookie';
   static const String data = 'data';

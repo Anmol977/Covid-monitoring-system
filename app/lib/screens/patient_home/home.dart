@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/mqtt.dart';
 import 'package:covmon/constants/parameters.dart';
@@ -21,6 +22,7 @@ class PatientHomeScreen extends StatefulWidget {
 }
 
 class _PatientHomeScreenState extends State<PatientHomeScreen> {
+  Patient patient = Patient.empty();
   @override
   void initState() {
     SocketIO.connectToServer();
@@ -28,9 +30,8 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     SocketIO.socket.dispose();
-    Token.reset();
     super.dispose();
   }
 
@@ -45,8 +46,10 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
             IconButton(
               icon: const Icon(Icons.logout),
               color: AppColors.grayWeb,
-              onPressed: () {
-                /* Token.reset(); */
+              onPressed: () async {
+                Token.reset();
+                // Urgent change Required
+                await Api.savePatientVitals(patient);
                 /* SocketIO.socket.dispose(); */
                 Navigator.pushReplacementNamed(context, Routes.select);
               },
@@ -71,10 +74,12 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
             vertical: 0.1.sw,
           ),
           child: FutureBuilder(
-            future: MQTTBroker.configureMQTT(),
+            future: MQTTBroker.configureMQTT(
+              context: context,
+              topics: Strings.topics,
+            ),
             builder: (context, snapshot) {
-              Patient patient =
-                  Provider.of<Patients>(context, listen: false).currentPatient;
+              patient = Provider.of<Patients>(context).currentPatient;
               if (SocketIO.socket.connected) {
                 SocketIO.sendData('patientDoctorId', patient.doctorId);
                 SocketIO.sendData(
@@ -85,7 +90,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                         Parameters.doctorId: patient.doctorId,
                         Parameters.temperature: patient.temperature,
                         Parameters.spO2: patient.spO2,
-                        Parameters.pulseRate: patient.pulseRate,
                         Parameters.heartRate: patient.heartRate,
                       },
                     ));
@@ -97,7 +101,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                 children: [
                   _buildPatientInfo(Strings.temperature, patient.temperature),
                   _buildPatientInfo(Strings.spo2level, patient.spO2),
-                  _buildPatientInfo(Strings.pulseRate, patient.pulseRate),
                   _buildPatientInfo(Strings.heartRate, patient.heartRate),
                 ],
               );

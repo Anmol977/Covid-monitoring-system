@@ -19,6 +19,21 @@ class Patients with ChangeNotifier {
     return _patientIds;
   }
 
+  void update(String topic, String value) {
+    switch (topic) {
+      case Parameters.temperature:
+        _currentPatient.temperature = value;
+        break;
+      case Parameters.spO2:
+        _currentPatient.spO2 = value;
+        break;
+      case Parameters.heartRate:
+        _currentPatient.heartRate = value;
+        break;
+    }
+    notifyListeners();
+  }
+
   bool patientAdded(String patientId) {
     return _patientIds.contains(patientId);
   }
@@ -37,10 +52,6 @@ class Patients with ChangeNotifier {
 
   Future<List<Patient>> getPatientsVitals() async {
     final List<Patient> _patientsVitals = [];
-    Map<String, dynamic> response = await Api.getPatientsVitals();
-    response[Parameters.data].forEach((patientData) {
-      _patientsVitals.add(Patient.fromMap(patientData));
-    });
     return _patientsVitals;
   }
 }

@@ -1,10 +1,10 @@
-import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/parameters.dart';
 import 'package:covmon/models/patient.dart';
 import 'package:flutter/material.dart';
 
 class Patients with ChangeNotifier {
   final List<String> _patientIds = [];
+  final List<Patient> _patients = [];
   Patient _currentPatient = Patient.empty();
 
   Patient get currentPatient {
@@ -15,8 +15,12 @@ class Patients with ChangeNotifier {
     _currentPatient = Patient.fromMap(patientDataMap[Parameters.data]);
   }
 
+  List<Patient> get patients {
+    return [..._patients];
+  }
+
   List<String> get patientIds {
-    return _patientIds;
+    return [..._patientIds];
   }
 
   void update(String topic, String value) {
@@ -36,6 +40,16 @@ class Patients with ChangeNotifier {
 
   bool patientAdded(String patientId) {
     return _patientIds.contains(patientId);
+  }
+
+  void addPatientVitals(Patient patient) {
+    _patients.add(patient);
+    notifyListeners();
+  }
+
+  void removePatientVitals(Patient patient) {
+    _patients.remove(patient);
+    notifyListeners();
   }
 
   void addPatient(String patientId) {

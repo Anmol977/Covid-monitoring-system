@@ -86,7 +86,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                     'sendVitalsToDoctor',
                     json.encode(
                       <String, String>{
-                        Parameters.patientId: patient.id,
+                        Parameters.id: patient.id,
                         Parameters.doctorId: patient.doctorId,
                         Parameters.temperature: patient.temperature,
                         Parameters.spO2: patient.spO2,

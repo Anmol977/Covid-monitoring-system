@@ -38,10 +38,11 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /* SocketIO.addEventListenerTo(Provider.of<Doctors>(context).currentDoctor.id); */
-    SocketIO.socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) {
-      debugPrint(data.toString());
-    });
+    SocketIO.addEventListenerTo(
+      context,
+      Provider.of<Doctors>(context).currentDoctor.id,
+    );
+    patients = Provider.of<Patients>(context).patients;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -59,25 +60,14 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             ),
           ],
         ),
-        body: FutureBuilder<List<Patient>>(
-          future: Provider.of<Patients>(context).getPatientsVitals(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
-            }
-            if (patients.isEmpty) {
-              patients = snapshot.data ?? [];
-            }
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0.02.sw),
-              child: patients.isEmpty
-                  ? const Text(Strings.noPatient)
-                  : ListView.builder(
-                      itemCount: patients.length,
-                      itemBuilder: (context, i) => PatientVitals(patients[i]),
-                    ),
-            );
-          },
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 0.02.sw),
+          child: patients.isEmpty
+              ? const Text(Strings.noPatient)
+              : ListView.builder(
+                  itemCount: patients.length,
+                  itemBuilder: (context, i) => PatientVitals(patients[i]),
+                ),
         ),
         floatingActionButton: FloatingActionButton(
           tooltip: Strings.patientSelect,

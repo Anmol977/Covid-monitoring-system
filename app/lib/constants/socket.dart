@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:covmon/models/patient.dart';
+import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import 'api.dart';
@@ -16,15 +21,21 @@ class SocketIO {
 
     socket.onConnect((_) {
       debugPrint('connected to socket server');
-      socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) {
-        debugPrint(data.toString());
-      });
     });
   }
 
-  static void addEventListenerTo(String topic) {
+  static void addEventListenerTo(BuildContext context, String topic) {
     socket.on(topic, (data) {
-      debugPrint(data.toString());
+      Map<String, dynamic> patientData = json.decode(data);
+      Patient patient = Patient.fromMap(patientData);
+      /* print(patient.id); */
+      /* print(Provider.of<Patients>(context, listen: false) */
+      /*     .patientAdded(patient.id)); */
+      /* Provider.of<Patients>(context, listen: false).addPatientVitals(patient); */
+      if (Provider.of<Patients>(context, listen: false)
+          .patientAdded(patient.id)) {
+        Provider.of<Patients>(context, listen: false).addPatientVitals(patient);
+      }
     });
   }
 

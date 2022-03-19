@@ -174,12 +174,21 @@ router.post('/savePatientVitals', async (req, res, next)=>{
                                    data : null
                               });
                          } else {
-                              let patientDetails = patientStore.getPatientDetails(payload.id);
-                              res.status(200).send({
-                                   error:'',
-                                   data:null,
-                                   message: staticVars.VITALS_SUCCESS
-                              });
+                              let patientDetails = patientStore.getPatientDetails(payload.id, req.body);
+                              if(patientDetails){
+                                   res.status(200).send({
+                                        error:'',
+                                        data:null,
+                                        message: staticVars.VITALS_SUCCESS
+                                   });
+                              } else {
+                                   return res
+                                   .status(500)
+                                   .send({
+                                        error: staticVars.GENERAL_ERROR,
+                                        data: null
+                                   });
+                              }
                          }
                     } else {
                          logger.error('scope error occured')

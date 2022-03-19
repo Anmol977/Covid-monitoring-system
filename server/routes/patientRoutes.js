@@ -168,30 +168,38 @@ router.post('savePatientVitals', async (req, res, next)=>{
                     if (payload.scope === 'Patient') {
                          const {error} = patientVitalsValidation(req.body);
                          if(error){
+                              logger.error('validation error occured while updating vitals')
                               return res.status(400).send({
                                    error: error,
                                    data : null
                               });
                          } else {
                               let patientDetails = patientStore.getPatientDetails(payload.id);
-                              console.log(patientDetails);
+                              res.status(200).send({
+                                   error:'',
+                                   data:null,
+                                   message: staticVars.VITALS_SUCCESS
+                              });
                          }
                     } else {
+                         logger.error('scope error occured')
                          return res
                          .status(401)
                          .send({
-                              error: utils.staticVars.AUTH_ERROR,
+                              error: utils.staticVars.SCOPE_ERROR,
                               data: null
                          });
                     }
                }
           } else {
+               logger.error('user not authorized to update vitals');
                return res.status(401).send({
                     error: staticVars.GENERAL_ERROR,
                     data: null
                });
           }
      } catch(e){
+          logger.error(e);
           return res
           .status(500)
           .send({

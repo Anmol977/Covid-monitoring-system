@@ -6,9 +6,8 @@ import 'api.dart';
 class SocketIO {
   static String serverIp = 'http://${Api.ip}:5000/';
   static late io.Socket socket;
-  static bool isConnected = false;
 
-  static void connectToServer(String topic, String doctorId) {
+  static void connectToServer() {
     socket = io.io(
         serverIp,
         io.OptionBuilder().setTransports(
@@ -16,17 +15,20 @@ class SocketIO {
         ).build());
 
     socket.onConnect((_) {
-      isConnected = true;
       debugPrint('connected to socket server');
-      sendData(topic, doctorId);
+      socket.on('9407351e-1e38-4f6d-90e5-f9d763c252c5', (data) {
+        debugPrint(data.toString());
+      });
     });
+  }
 
+  static void addEventListenerTo(String topic) {
+    socket.on(topic, (data) {
+      debugPrint(data.toString());
+    });
   }
 
   static void sendData(String topic, String message) {
-    if (!isConnected) {
-      return;
-    }
     socket.emit(topic, message);
   }
 }

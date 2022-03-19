@@ -16,6 +16,7 @@ class Parameters {
   static const String lastUpdated = 'lastUpdated';
   static const String status = 'status';
   static const String doctorId = 'DoctorId';
+  static const String patientId = 'patientId';
 
   static const String cookie = 'set-cookie';
   static const String data = 'data';

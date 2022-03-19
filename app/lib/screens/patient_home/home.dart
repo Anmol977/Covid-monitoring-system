@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/mqtt.dart';
+import 'package:covmon/constants/parameters.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
 import 'package:covmon/constants/socket.dart';
 import 'package:covmon/constants/strings.dart';
+import 'package:covmon/models/patient.dart';
 import 'package:covmon/provider/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,15 +23,19 @@ class PatientHomeScreen extends StatefulWidget {
 class _PatientHomeScreenState extends State<PatientHomeScreen> {
   @override
   void initState() {
+    SocketIO.connectToServer();
     super.initState();
   }
 
   @override
+  void dispose() {
+    SocketIO.socket.dispose();
+    Token.reset();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    SocketIO.connectToServer(
-      'patientDoctorId',
-      Provider.of<Patients>(context, listen: false).currentPatient.doctorId,
-    );
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -38,7 +46,8 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
               icon: const Icon(Icons.logout),
               color: AppColors.grayWeb,
               onPressed: () {
-                Token.reset();
+                /* Token.reset(); */
+                /* SocketIO.socket.dispose(); */
                 Navigator.pushReplacementNamed(context, Routes.select);
               },
             ),
@@ -64,15 +73,32 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           child: FutureBuilder(
             future: MQTTBroker.configureMQTT(),
             builder: (context, snapshot) {
+              Patient patient =
+                  Provider.of<Patients>(context, listen: false).currentPatient;
+              if (SocketIO.socket.connected) {
+                SocketIO.sendData('patientDoctorId', patient.doctorId);
+                SocketIO.sendData(
+                    'sendVitalsToDoctor',
+                    json.encode(
+                      <String, String>{
+                        Parameters.patientId: patient.id,
+                        Parameters.doctorId: patient.doctorId,
+                        Parameters.temperature: patient.temperature,
+                        Parameters.spO2: patient.spO2,
+                        Parameters.pulseRate: patient.pulseRate,
+                        Parameters.heartRate: patient.heartRate,
+                      },
+                    ));
+              }
               return GridView.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 0.05.sw,
                 crossAxisSpacing: 0.05.sw,
                 children: [
-                  _buildPatientInfo(Strings.temperature, Strings.zero),
-                  _buildPatientInfo(Strings.spo2level, Strings.zero),
-                  _buildPatientInfo(Strings.pulseRate, Strings.zero),
-                  _buildPatientInfo(Strings.heartRate, Strings.zero),
+                  _buildPatientInfo(Strings.temperature, patient.temperature),
+                  _buildPatientInfo(Strings.spo2level, patient.spO2),
+                  _buildPatientInfo(Strings.pulseRate, patient.pulseRate),
+                  _buildPatientInfo(Strings.heartRate, patient.heartRate),
                 ],
               );
             },

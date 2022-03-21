@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class Patients with ChangeNotifier {
   final List<String> _patientIds = [];
-  final List<Patient> _patients = [];
+  final Map<String, Patient> _patients = {};
   Patient _currentPatient = Patient.empty();
 
   Patient get currentPatient {
@@ -15,8 +15,8 @@ class Patients with ChangeNotifier {
     _currentPatient = Patient.fromMap(patientDataMap[Parameters.data]);
   }
 
-  List<Patient> get patients {
-    return [..._patients];
+  Map<String, Patient> get patients {
+    return _patients;
   }
 
   List<String> get patientIds {
@@ -43,7 +43,7 @@ class Patients with ChangeNotifier {
   }
 
   void addPatientVitals(Patient patient) {
-    _patients.add(patient);
+    _patients[patient.id] = patient;
     notifyListeners();
   }
 

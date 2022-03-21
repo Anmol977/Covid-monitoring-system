@@ -7,12 +7,12 @@
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
 
-#define DELAY 5000
-#define SENSOR_PIN 21
+#define DELAY 3000
+#define SENSOR_PIN 19
 
 uint32_t tsLastReport = 0;
 const int mqtt_port = 1883;
-const char *topic = "esp32/test";
+const char *topic = "temperature";
 const char *mqtt_password = "public";
 const char *mqtt_username = "Chauhan";
 const char *mqtt_broker = "192.168.29.24";
@@ -90,14 +90,10 @@ void setup()
 
 void senseTemperature()
 {
-  bool test = client.publish(topic, "Moshi Moshi"); //testing
-  if (test) {
-    Serial.println("Test Success");
-  }
   DS18B20.requestTemperatures();
   tempC = DS18B20.getTempCByIndex(0);
   tempF = DS18B20.getTempFByIndex(0);
-
+  
   if (tempC != DEVICE_DISCONNECTED_C)
   {
 
@@ -105,7 +101,7 @@ void senseTemperature()
     Serial.println(tempC);
     String payload_temp;
     payload_temp += tempC;
-    temp_res = client.publish("esp32/temp", (char *)payload_temp.c_str());
+    temp_res = client.publish(topic, (char *)payload_temp.c_str());
 
     if (temp_res)
     {

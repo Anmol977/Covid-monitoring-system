@@ -21,7 +21,7 @@ class DoctorHomeScreen extends StatefulWidget {
 }
 
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
-  List<Patient> patients = [];
+  Map<String, Patient> patients = {};
 
   @override
   void initState() {
@@ -66,7 +66,10 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               ? const Text(Strings.noPatient)
               : ListView.builder(
                   itemCount: patients.length,
-                  itemBuilder: (context, i) => PatientVitals(patients[i]),
+                  itemBuilder: (context, i) {
+                    String patientId = patients.keys.elementAt(i);
+                    return PatientVitals(patients[patientId]!);
+                  },
                 ),
         ),
         floatingActionButton: FloatingActionButton(

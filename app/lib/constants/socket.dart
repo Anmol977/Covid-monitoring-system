@@ -28,14 +28,7 @@ class SocketIO {
     socket.on(topic, (data) {
       Map<String, dynamic> patientData = json.decode(data);
       Patient patient = Patient.fromMap(patientData);
-      /* print(patient.id); */
-      /* print(Provider.of<Patients>(context, listen: false) */
-      /*     .patientAdded(patient.id)); */
-      /* Provider.of<Patients>(context, listen: false).addPatientVitals(patient); */
-      if (Provider.of<Patients>(context, listen: false)
-          .patientAdded(patient.id)) {
-        Provider.of<Patients>(context, listen: false).addPatientVitals(patient);
-      }
+      Provider.of<Patients>(context, listen: false).addPatientVitals(patient);
     });
   }
 

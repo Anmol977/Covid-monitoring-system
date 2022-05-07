@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');
 const utils = require('../utils');
 const logger = require('../logger');
 const { staticVars } = require('../utils');
+const patientStore = require('../stores/patientStore');
 const { generateUserToken, validateJwtToken } = require('../auth/jwt');
 const { patientSignupValidation, patientLogInValidation, patientJwtValidation, patientVitalsValidation } = require('./patientValidations');
-const { patientEmailExists, patientPhoneExists, create, getPatientDetails, checkPatientExists } = require('../stores/patientStore');
-const patientStore = require('../stores/patientStore');
+const { patientEmailExists, create, getPatientDetails, checkPatientExists } = require('../stores/patientStore');
 
 router.post('/patient/signUp', async (req, res, next) => {
      const { error } = patientSignupValidation(req.body)
@@ -138,7 +138,7 @@ router.post('/patient/login/email', async (req, res, next) => {
                          return res
                               .status(400)
                               .send({
-                                   error: 'Incorrect Password, failed to Log-In',
+                                   error: 'Incorrect Password or e-mail, failed to Log-In',
                                    data: null
                               });
                     }
@@ -195,7 +195,7 @@ router.post('/savePatientVitals', async (req, res, next)=>{
                     } else {
                          logger.error('scope error occured')
                          return res
-                         .status(401)
+                         .status(403)
                          .send({
                               error: utils.staticVars.SCOPE_ERROR,
                               data: null
@@ -220,5 +220,8 @@ router.post('/savePatientVitals', async (req, res, next)=>{
      }
 })
 
+router.post('/notifyDoctor', async (req, res, next) => {
+     
+})
 
 module.exports = router;

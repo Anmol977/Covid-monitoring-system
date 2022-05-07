@@ -1,3 +1,4 @@
+
 module.exports = {
      staticVars: {
           SUCCESS_FETCH: 'Details fetched successfully',
@@ -23,5 +24,8 @@ module.exports = {
                return 'serious';
           if( SpO2 < 92 || heartRate > 120 || temperature >=38)
                return 'occurance of comorbidities';
+     },
+     sendPushNotif : () =>{
+
      }
 }

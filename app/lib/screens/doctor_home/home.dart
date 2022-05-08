@@ -1,3 +1,4 @@
+import 'package:covmon/constants/api.dart';
 import 'package:covmon/constants/colors.dart';
 import 'package:covmon/constants/preferences.dart';
 import 'package:covmon/constants/routes.dart';
@@ -64,6 +65,15 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
           padding: EdgeInsets.symmetric(horizontal: 0.02.sw),
           child: patients.isEmpty
               ? const Text(Strings.noPatient)
+              /* FutureBuilder<Map<String, dynamic>>( */
+              /* future: Api.getPatientsVitals(), */
+              /* builder: */
+              /* (context, AsyncSnapshot<Map<String, dynamic>> snapshot) { */
+              /* if (!snapshot.hasData) { */
+              /* return const Text(Strings.noPatient); */
+              /* } */
+              /* return Container(color: Colors.red); */
+              /* }) */
               : ListView.builder(
                   itemCount: patients.length,
                   itemBuilder: (context, i) {

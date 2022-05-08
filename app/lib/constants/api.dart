@@ -169,15 +169,15 @@ class Api {
     return patients;
   }
 
-  /* static Future<Map<String, dynamic>> getPatientsVitals() async { */
-  /*   http.Response response = await http.get( */
-  /*     Uri.parse(_host + _getPatientVitals), */
-  /*     headers: { */
-  /*       Strings.authorization: Token.bearerToken, */
-  /*     }, */
-  /*   ); */
-  /*   return json.decode(response.body); */
-  /* } */
+  static Future<Map<String, dynamic>> getPatientsVitals() async {
+    http.Response response = await http.get(
+      Uri.parse(_host + _getPatientVitals),
+      headers: {
+        Strings.authorization: Token.bearerToken,
+      },
+    );
+    return json.decode(response.body);
+  }
 
   static Future<Map<String, dynamic>> assignPatients(String patients) async {
     http.Response response = await http.post(

@@ -52,7 +52,6 @@ class Strings {
   static const String temperature = 'Temperature';
   static const String spo2level = 'SpO2 Level';
   static const String pulseRate = 'Pulse Rate';
-  static const String heartRate = 'Heart Rate';
   static const String notifyDoctor = 'Notify Doctor';
   static const String zero = '0';
   static const String updatedOn = 'Updated On : ';
@@ -64,7 +63,6 @@ class Strings {
 
   static const List<String> topics = [
     Parameters.temperature,
-    Parameters.heartRate,
     Parameters.spO2,
   ];
 }

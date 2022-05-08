@@ -31,9 +31,6 @@ class Patients with ChangeNotifier {
       case Parameters.spO2:
         _currentPatient.spO2 = value;
         break;
-      case Parameters.heartRate:
-        _currentPatient.heartRate = value;
-        break;
     }
     notifyListeners();
   }

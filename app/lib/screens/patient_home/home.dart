@@ -90,7 +90,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                         Parameters.doctorId: patient.doctorId,
                         Parameters.temperature: patient.temperature,
                         Parameters.spO2: patient.spO2,
-                        Parameters.heartRate: patient.heartRate,
                       },
                     ));
               }
@@ -101,7 +100,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                 children: [
                   _buildPatientInfo(Strings.temperature, patient.temperature),
                   _buildPatientInfo(Strings.spo2level, patient.spO2),
-                  _buildPatientInfo(Strings.heartRate, patient.heartRate),
                 ],
               );
             },

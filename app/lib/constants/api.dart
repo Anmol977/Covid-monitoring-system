@@ -115,7 +115,6 @@ class Api {
     await http.post(
       Uri.parse(_host + _savePatientVitals),
       body: {
-        Parameters.heartRate: patient.heartRate,
         Parameters.SpO2: patient.spO2,
         Parameters.temperature: patient.temperature,
         Parameters.status: patient.status,

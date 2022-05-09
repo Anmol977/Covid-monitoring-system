@@ -174,7 +174,7 @@ router.post('/savePatientVitals', async (req, res, next)=>{
                                    data : null
                               });
                          } else {
-                              req.body.status = utils.classifyPatients(req.body);
+                              req.body.status = utils.classifyPatients(req.body, payload.id);
                               let lastUpdated = new Date();
                               let patientDetails = await patientStore.setPatientVitals(payload.id, req.body,lastUpdated);
                               if(patientDetails){

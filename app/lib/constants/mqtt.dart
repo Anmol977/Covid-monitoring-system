@@ -6,6 +6,8 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:provider/provider.dart';
 
+import 'api.dart';
+
 enum Info {
   temperature,
   spo2level,
@@ -13,7 +15,7 @@ enum Info {
 }
 
 class MQTTBroker {
-  static const String host = '192.168.29.24';
+  static String host = Api.ip;
   static const String clientIdentifier = 'app';
 
   static final MqttServerClient client =
@@ -75,22 +77,28 @@ class MQTTBroker {
 
     final connMess = MqttConnectMessage()
         .withClientIdentifier('alouette')
-        .withWillTopic(
-            'willtopic') // If you set this you must set a will message
+        .withWillTopic('willtopic')
         .withWillMessage('My Will message')
-        .startClean() // Non persistent session for testing
+        .startClean()
         .withWillQos(MqttQos.atLeastOnce);
     debugPrint('EXAMPLE::Mosquitto client connecting....');
     client.connectionMessage = connMess;
 
+    print("first here");
+
     try {
       await client.connect();
+      print("here");
     } on NoConnectionException catch (e) {
       debugPrint('EXAMPLE::client exception - $e');
       client.disconnect();
     } on SocketException catch (e) {
       debugPrint('EXAMPLE::socket exception - $e');
       client.disconnect();
+    } catch (e) {
+      print(e);
+    } finally {
+      print("oui");
     }
 
     if (client.connectionStatus!.state == MqttConnectionState.connected) {

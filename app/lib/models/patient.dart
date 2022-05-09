@@ -31,7 +31,7 @@ class Patient {
         heartRate: Strings.empty,
         lastUpdated: Strings.empty,
         spO2: Strings.empty,
-        status: Strings.empty,
+        status: Strings.normal,
         temperature: Strings.empty,
         doctorId: Strings.empty,
       );

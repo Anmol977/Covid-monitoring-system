@@ -36,7 +36,8 @@ module.exports = {
       0.5
     );
     logger.info(`calculated chi value is : ${chiVal}`);
-    let oldChiVal = await patientStore.getPatientChi(patientId);
+    let details = await patientStore.getPatientChi(patientId);
+    let oldChiVal = details.chiValue;
     let res = await patientStore.updatePatientChi(patientId, chiVal);
     if (res) {
       logger.info(`chi value of patient with id : ${patientId} was updated`);
@@ -52,4 +53,3 @@ module.exports = {
   },
   sendPushNotif: () => {},
 };
-

@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'parameters.dart';
 
 class Api {
-  static const _ipaddress = '192.168.0.104'; //0.104';
+  static const _ipaddress = '192.168.0.121'; //0.104';
   static const String _host = 'http://' + _ipaddress + ':5000/';
 
   static const String _patientLogin = 'patient/login/email';

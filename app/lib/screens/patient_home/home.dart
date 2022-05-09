@@ -52,7 +52,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                 // Urgent change Required
                 await Api.savePatientVitals(patient);
                 /* SocketIO.socket.dispose(); */
-                /* Navigator.pushReplacementNamed(context, Routes.select); */
+                Navigator.pushReplacementNamed(context, Routes.select);
               },
             ),
           ],
@@ -95,14 +95,30 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                       },
                     ));
               }
-              return GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 0.05.sw,
-                crossAxisSpacing: 0.05.sw,
+              return Column(
                 children: [
-                  _buildPatientInfo(Strings.temperature, patient.temperature),
-                  _buildPatientInfo(Strings.spo2level, patient.spO2),
-                  _buildPatientInfo(Strings.heartRate, patient.heartRate),
+                  SizedBox(
+                    height: 20.h,
+                    child: Center(
+                      child:
+                          Text(Strings.status + patient.status.toUpperCase()),
+                    ),
+                  ),
+                  SizedBox(height: 40.h),
+                  SizedBox(
+                    height: 0.6.sh,
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 0.05.sw,
+                      crossAxisSpacing: 0.05.sw,
+                      children: [
+                        _buildPatientInfo(
+                            Strings.temperature, patient.temperature),
+                        _buildPatientInfo(Strings.spo2level, patient.spO2),
+                        _buildPatientInfo(Strings.heartRate, patient.heartRate),
+                      ],
+                    ),
+                  ),
                 ],
               );
             },

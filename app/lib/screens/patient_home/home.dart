@@ -32,6 +32,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   @override
   void dispose() async {
     SocketIO.socket.dispose();
+    await Api.savePatientVitals(patient);
     super.dispose();
   }
 

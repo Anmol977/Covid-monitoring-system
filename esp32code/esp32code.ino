@@ -1,8 +1,6 @@
-#include <string>
-#include <WiFi.h>
+                 #include <WiFi.h>
 #include <Wire.h>
-#include "values.h"
-#include <iostream>
+//#include "values.h"
 #include <OneWire.h>
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
@@ -15,7 +13,7 @@ const int mqtt_port = 1883;
 const char *topic = "temperature";
 const char *mqtt_password = "public";
 const char *mqtt_username = "Chauhan";
-const char *mqtt_broker = "192.168.29.24";
+const char *mqtt_broker = "192.168.0.104";
 
 float tempF; // temperature in Fahrenheit
 float tempC; // temperature in Celsius
@@ -31,7 +29,7 @@ DallasTemperature DS18B20(&oneWire);
 void ConnectToWiFi()
 {
   WiFi.mode(WIFI_STA);
-  WiFi.begin(SSID, PASS);
+  WiFi.begin("TP-Link_333E", "73080190");
   Serial.println("Connecting to Wifi...");
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -80,7 +78,7 @@ void connecttoMQTT()
 void setup()
 {
   Wire.begin();
-  Serial.begin(500000);
+  Serial.begin(900000);
   while (!Serial)
     ;
   ConnectToWiFi();

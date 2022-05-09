@@ -31,7 +31,7 @@ module.exports = {
           return db('Patients').select('roomNo', 'fullName', 'id').where('DoctorId',null);
      },
      getPatientVitals: (id) => {
-          return db('Patients').select('SpO2', 'fullName', 'roomNo', 'lastUpdated', 'SpO2', 'heartRate', 'temperature', 'status').where({ id }).first();
+          return db('Patients').select( 'fullName', 'roomNo', 'lastUpdated', 'SpO2', 'heartRate', 'temperature', 'status').where({ id }).first();
      },
      setPatientVitals : (id, data, lastUpdated) =>{
           return db('Patients').where({id}).update({
@@ -44,5 +44,13 @@ module.exports = {
      },
      updatePatientAssignedDoctor: (patientId, doctorId) => {
           return db('Patients').where({id:patientId}).update({DoctorId: doctorId});
+     },
+     getPatientChi : (patientId) => {
+          return db('Patients').where({id:patientId}).first();
+     },
+     updatePatientChi : (patientId, chiVal) => {
+          return db('Patients').where({id:patientId}).update({
+               chiValue : chiVal
+          });
      }
 }

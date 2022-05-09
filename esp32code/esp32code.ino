@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include "values.h"
+#include "MAX30100_PulseOximeter.h"
 #include <iostream>
 #include <OneWire.h>
 #include <PubSubClient.h>
@@ -9,13 +10,14 @@
 
 #define DELAY 3000
 #define SENSOR_PIN 19
+#define REPORTING_PERIOD_MS 1000
 
 uint32_t tsLastReport = 0;
 const int mqtt_port = 1883;
 const char *topic = "temperature";
 const char *mqtt_password = "public";
 const char *mqtt_username = "Chauhan";
-const char *mqtt_broker = "192.168.29.24";
+const char *mqtt_broker = "192.168.0.121";
 
 float tempF; // temperature in Fahrenheit
 float tempC; // temperature in Celsius
@@ -27,6 +29,7 @@ WiFiClient espClient;
 OneWire oneWire(SENSOR_PIN);
 PubSubClient client(espClient);
 DallasTemperature DS18B20(&oneWire);
+PulseOximeter pox;
 
 void ConnectToWiFi()
 {
@@ -81,11 +84,19 @@ void setup()
 {
   Wire.begin();
   Serial.begin(500000);
-  while (!Serial)
-    ;
+  while (!Serial);
   ConnectToWiFi();
   connecttoMQTT();
   DS18B20.begin();
+  Serial.print("Initializing pulse oximeter..");
+ 
+  if (!pox.begin()) {
+    Serial.println("FAILED");
+    for(;;);
+  } else {
+    Serial.println("SUCCESS");
+  }
+
 }
 
 void senseTemperature()
@@ -118,4 +129,19 @@ void loop()
 {
   senseTemperature();
   delay(DELAY);
+  pox.update();
+  if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
+    Serial.print("Heart rate:");
+    Serial.print(pox.getHeartRate());
+    Serial.print("bpm / SpO2:");
+    Serial.print(pox.getSpO2());
+    Serial.println("%");
+     
+    tsLastReport = millis();
+  }
+}
+
+void onBeatDetected()
+{
+   Serial.println("Beat!");
 }

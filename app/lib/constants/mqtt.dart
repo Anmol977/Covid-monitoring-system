@@ -84,21 +84,14 @@ class MQTTBroker {
     debugPrint('EXAMPLE::Mosquitto client connecting....');
     client.connectionMessage = connMess;
 
-    print("first here");
-
     try {
       await client.connect();
-      print("here");
     } on NoConnectionException catch (e) {
       debugPrint('EXAMPLE::client exception - $e');
       client.disconnect();
     } on SocketException catch (e) {
       debugPrint('EXAMPLE::socket exception - $e');
       client.disconnect();
-    } catch (e) {
-      print(e);
-    } finally {
-      print("oui");
     }
 
     if (client.connectionStatus!.state == MqttConnectionState.connected) {

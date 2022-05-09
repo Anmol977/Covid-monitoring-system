@@ -52,7 +52,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                 // Urgent change Required
                 await Api.savePatientVitals(patient);
                 /* SocketIO.socket.dispose(); */
-                Navigator.pushReplacementNamed(context, Routes.select);
+                /* Navigator.pushReplacementNamed(context, Routes.select); */
               },
             ),
           ],
